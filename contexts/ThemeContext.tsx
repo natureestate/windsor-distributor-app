@@ -111,3 +111,37 @@ export function useThemeValue<T>(lightValue: T, darkValue: T): T {
   return isDark ? darkValue : lightValue;
 }
 
+// Hook สำหรับดึง theme colors ที่ใช้บ่อย
+export function useThemeColors() {
+  const { isDark } = useTheme();
+
+  return {
+    // Background colors
+    bgColor: isDark ? "bg-background-dark" : "bg-background-light",
+    cardBg: isDark ? "bg-surface-dark" : "bg-white",
+
+    // Text colors
+    textMain: isDark ? "text-text-main-dark" : "text-text-main-light",
+    textSub: isDark ? "text-text-sub-dark" : "text-text-sub-light",
+
+    // Border colors
+    borderColor: isDark ? "border-border-dark" : "border-border-light",
+
+    // Icon colors (hex values)
+    iconMain: isDark ? "#e2e8f0" : "#0d141b",
+    iconSub: isDark ? "#94a3b8" : "#4c739a",
+    iconMuted: isDark ? "#64748b" : "#d1d5db",
+
+    // Raw values for style objects
+    raw: {
+      bgColor: isDark ? "#101922" : "#f6f7f8",
+      cardBg: isDark ? "#1e2936" : "#ffffff",
+      textMain: isDark ? "#e2e8f0" : "#0d141b",
+      textSub: isDark ? "#94a3b8" : "#4c739a",
+      borderColor: isDark ? "#334155" : "#e2e8f0",
+    },
+
+    isDark,
+  };
+}
+

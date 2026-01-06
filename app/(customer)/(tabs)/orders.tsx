@@ -1,6 +1,7 @@
 /**
  * Orders Screen - หน้าคำสั่งซื้อ
  * แสดงรายการคำสั่งซื้อทั้งหมดและติดตามสถานะ
+ * รองรับ Dark Mode
  */
 
 import React, { useState } from "react";
@@ -11,6 +12,9 @@ import { Ionicons } from "@expo/vector-icons";
 
 // Components
 import { Badge, Chip, Button } from "../../../components/ui";
+
+// Context
+import { useThemeColors } from "../../../contexts";
 
 // Mock Data
 import { mockOrders } from "../../../data/mockData";
@@ -28,6 +32,7 @@ const orderTabs = [
 
 export default function OrdersScreen() {
   const router = useRouter();
+  const { bgColor, cardBg, textMain, textSub, borderColor, iconSub, isDark } = useThemeColors();
 
   // State
   const [selectedTab, setSelectedTab] = useState("all");
@@ -43,17 +48,17 @@ export default function OrdersScreen() {
     return (
       <TouchableOpacity
         key={order.id}
-        className="bg-white rounded-xl p-4 mb-3"
+        className={`${cardBg} rounded-xl p-4 mb-3`}
         onPress={() => router.push(`/(customer)/orders/${order.id}`)}
         activeOpacity={0.9}
       >
         {/* Header */}
         <View className="flex-row items-center justify-between mb-3">
           <View>
-            <Text className="text-sm font-semibold text-text-main-light">
+            <Text className={`text-sm font-semibold ${textMain}`}>
               คำสั่งซื้อ #{order.orderNumber}
             </Text>
-            <Text className="text-xs text-text-sub-light">{formatDate(order.createdAt)}</Text>
+            <Text className={`text-xs ${textSub}`}>{formatDate(order.createdAt)}</Text>
           </View>
           <Badge variant={getOrderStatusColor(order.status)}>
             {getOrderStatusText(order.status)}
@@ -61,17 +66,17 @@ export default function OrdersScreen() {
         </View>
 
         {/* Items preview */}
-        <View className="flex-row items-center py-3 border-t border-b border-border-light">
+        <View className={`flex-row items-center py-3 border-t border-b ${borderColor}`}>
           <Image
             source={{ uri: firstItem.productSnapshot.thumbnailUrl }}
             className="w-16 h-16 rounded-lg bg-gray-100"
             resizeMode="cover"
           />
           <View className="flex-1 ml-3">
-            <Text className="text-sm text-text-main-light font-medium" numberOfLines={2}>
+            <Text className={`text-sm ${textMain} font-medium`} numberOfLines={2}>
               {firstItem.productSnapshot.nameTh}
             </Text>
-            <Text className="text-xs text-text-sub-light mt-0.5">
+            <Text className={`text-xs ${textSub} mt-0.5`}>
               x{firstItem.quantity}
               {order.items.length > 1 && ` และอีก ${order.items.length - 1} รายการ`}
             </Text>
@@ -80,13 +85,13 @@ export default function OrdersScreen() {
 
         {/* Tracking info (if shipped) */}
         {order.status === "shipped" && order.shipping.trackingNumber && (
-          <View className="flex-row items-center py-3 border-b border-border-light">
+          <View className={`flex-row items-center py-3 border-b ${borderColor}`}>
             <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center">
               <Ionicons name="cube-outline" size={16} color="#137fec" />
             </View>
             <View className="flex-1 ml-3">
-              <Text className="text-xs text-text-sub-light">{order.shipping.carrier}</Text>
-              <Text className="text-sm font-medium text-text-main-light">
+              <Text className={`text-xs ${textSub}`}>{order.shipping.carrier}</Text>
+              <Text className={`text-sm font-medium ${textMain}`}>
                 {order.shipping.trackingNumber}
               </Text>
             </View>
@@ -98,7 +103,7 @@ export default function OrdersScreen() {
 
         {/* Footer */}
         <View className="flex-row items-center justify-between pt-3">
-          <Text className="text-sm text-text-sub-light">ยอดรวม</Text>
+          <Text className={`text-sm ${textSub}`}>ยอดรวม</Text>
           <Text className="text-base font-bold text-primary">
             {formatPrice(order.pricing.total)}
           </Text>
@@ -126,14 +131,14 @@ export default function OrdersScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+    <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
       {/* Header */}
-      <View className="px-4 py-3 bg-white border-b border-border-light">
-        <Text className="text-xl font-bold text-text-main-light">คำสั่งซื้อของฉัน</Text>
+      <View className={`px-4 py-3 ${cardBg} border-b ${borderColor}`}>
+        <Text className={`text-xl font-bold ${textMain}`}>คำสั่งซื้อของฉัน</Text>
       </View>
 
       {/* Tabs */}
-      <View className="bg-white border-b border-border-light">
+      <View className={`${cardBg} border-b ${borderColor}`}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -161,8 +166,8 @@ export default function OrdersScreen() {
           filteredOrders.map(renderOrderCard)
         ) : (
           <View className="flex-1 items-center justify-center py-12">
-            <Ionicons name="receipt-outline" size={48} color="#d1d5db" />
-            <Text className="text-text-sub-light text-base mt-4">ไม่มีคำสั่งซื้อ</Text>
+            <Ionicons name="receipt-outline" size={48} color={isDark ? "#64748b" : "#d1d5db"} />
+            <Text className={`${textSub} text-base mt-4`}>ไม่มีคำสั่งซื้อ</Text>
           </View>
         )}
       </ScrollView>

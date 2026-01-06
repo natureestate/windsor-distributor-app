@@ -1,6 +1,7 @@
 /**
  * Cart Screen - หน้าตะกร้าสินค้า
  * แสดงรายการสินค้าในตะกร้า, ส่วนลด, และสรุปราคา
+ * รองรับ Dark Mode
  */
 
 import React, { useState } from "react";
@@ -12,6 +13,9 @@ import { Ionicons } from "@expo/vector-icons";
 // Components
 import { Button, Input } from "../../../components/ui";
 
+// Context
+import { useThemeColors } from "../../../contexts";
+
 // Mock Data
 import { mockCartItems } from "../../../data/mockData";
 import { formatPrice } from "../../../lib/utils";
@@ -19,6 +23,7 @@ import { CartItem } from "../../../types/cart";
 
 export default function CartScreen() {
   const router = useRouter();
+  const { bgColor, cardBg, textMain, textSub, borderColor, iconMain, isDark } = useThemeColors();
 
   // State
   const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
@@ -68,7 +73,7 @@ export default function CartScreen() {
 
   // Render cart item
   const renderCartItem = (item: CartItem) => (
-    <View key={item.id} className="bg-white rounded-xl p-4 mb-3 flex-row">
+    <View key={item.id} className={`${cardBg} rounded-xl p-4 mb-3 flex-row`}>
       {/* รูปภาพ */}
       <Image
         source={{ uri: item.productSnapshot.thumbnailUrl }}
@@ -80,10 +85,10 @@ export default function CartScreen() {
       <View className="flex-1 ml-3">
         <View className="flex-row items-start justify-between">
           <View className="flex-1 mr-2">
-            <Text className="text-sm font-medium text-text-main-light" numberOfLines={2}>
+            <Text className={`text-sm font-medium ${textMain}`} numberOfLines={2}>
               {item.productSnapshot.nameTh}
             </Text>
-            <Text className="text-xs text-text-sub-light mt-0.5">
+            <Text className={`text-xs ${textSub} mt-0.5`}>
               SKU: {item.productSnapshot.sku}
             </Text>
           </View>
@@ -96,7 +101,7 @@ export default function CartScreen() {
 
         {/* Configuration (ถ้ามี) */}
         {item.configuration.width && (
-          <Text className="text-xs text-text-sub-light mt-1">
+          <Text className={`text-xs ${textSub} mt-1`}>
             ขนาด: {item.configuration.width} x {item.configuration.height} ซม.
           </Text>
         )}
@@ -106,21 +111,21 @@ export default function CartScreen() {
           <Text className="text-base font-bold text-primary">{formatPrice(item.totalPrice)}</Text>
 
           {/* Quantity controls */}
-          <View className="flex-row items-center bg-background-light rounded-lg">
+          <View className={`flex-row items-center ${bgColor} rounded-lg`}>
             <TouchableOpacity
               className="w-8 h-8 items-center justify-center"
               onPress={() => updateQuantity(item.id, -1)}
             >
-              <Ionicons name="remove" size={18} color="#0d141b" />
+              <Ionicons name="remove" size={18} color={iconMain} />
             </TouchableOpacity>
-            <Text className="w-8 text-center font-medium text-text-main-light">
+            <Text className={`w-8 text-center font-medium ${textMain}`}>
               {item.quantity}
             </Text>
             <TouchableOpacity
               className="w-8 h-8 items-center justify-center"
               onPress={() => updateQuantity(item.id, 1)}
             >
-              <Ionicons name="add" size={18} color="#0d141b" />
+              <Ionicons name="add" size={18} color={iconMain} />
             </TouchableOpacity>
           </View>
         </View>
@@ -131,16 +136,16 @@ export default function CartScreen() {
   // Empty cart
   if (cartItems.length === 0) {
     return (
-      <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+      <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
         {/* Header */}
-        <View className="px-4 py-3 bg-white border-b border-border-light">
-          <Text className="text-xl font-bold text-text-main-light">ตะกร้าสินค้า</Text>
+        <View className={`px-4 py-3 ${cardBg} border-b ${borderColor}`}>
+          <Text className={`text-xl font-bold ${textMain}`}>ตะกร้าสินค้า</Text>
         </View>
 
         <View className="flex-1 items-center justify-center px-4">
-          <Ionicons name="cart-outline" size={64} color="#d1d5db" />
-          <Text className="text-lg font-medium text-text-main-light mt-4">ตะกร้าว่างเปล่า</Text>
-          <Text className="text-sm text-text-sub-light mt-1 text-center">
+          <Ionicons name="cart-outline" size={64} color={isDark ? "#64748b" : "#d1d5db"} />
+          <Text className={`text-lg font-medium ${textMain} mt-4`}>ตะกร้าว่างเปล่า</Text>
+          <Text className={`text-sm ${textSub} mt-1 text-center`}>
             เพิ่มสินค้าลงตะกร้าเพื่อเริ่มช้อปปิ้ง
           </Text>
           <Button
@@ -156,11 +161,11 @@ export default function CartScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+    <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
       {/* Header */}
-      <View className="px-4 py-3 bg-white border-b border-border-light">
-        <Text className="text-xl font-bold text-text-main-light">ตะกร้าสินค้า</Text>
-        <Text className="text-sm text-text-sub-light">{cartItems.length} รายการ</Text>
+      <View className={`px-4 py-3 ${cardBg} border-b ${borderColor}`}>
+        <Text className={`text-xl font-bold ${textMain}`}>ตะกร้าสินค้า</Text>
+        <Text className={`text-sm ${textSub}`}>{cartItems.length} รายการ</Text>
       </View>
 
       <ScrollView
@@ -172,8 +177,8 @@ export default function CartScreen() {
         {cartItems.map(renderCartItem)}
 
         {/* Discount Code */}
-        <View className="bg-white rounded-xl p-4 mb-3">
-          <Text className="text-sm font-semibold text-text-main-light mb-3">รหัสส่วนลด</Text>
+        <View className={`${cardBg} rounded-xl p-4 mb-3`}>
+          <Text className={`text-sm font-semibold ${textMain} mb-3`}>รหัสส่วนลด</Text>
           <View className="flex-row gap-2">
             <View className="flex-1">
               <Input
@@ -198,13 +203,13 @@ export default function CartScreen() {
         </View>
 
         {/* Order Summary */}
-        <View className="bg-white rounded-xl p-4">
-          <Text className="text-sm font-semibold text-text-main-light mb-3">สรุปคำสั่งซื้อ</Text>
+        <View className={`${cardBg} rounded-xl p-4`}>
+          <Text className={`text-sm font-semibold ${textMain} mb-3`}>สรุปคำสั่งซื้อ</Text>
 
           <View className="space-y-2">
             <View className="flex-row justify-between py-1">
-              <Text className="text-sm text-text-sub-light">ยอดรวมสินค้า</Text>
-              <Text className="text-sm text-text-main-light">{formatPrice(subtotal)}</Text>
+              <Text className={`text-sm ${textSub}`}>ยอดรวมสินค้า</Text>
+              <Text className={`text-sm ${textMain}`}>{formatPrice(subtotal)}</Text>
             </View>
 
             {appliedDiscount > 0 && (
@@ -215,19 +220,19 @@ export default function CartScreen() {
             )}
 
             <View className="flex-row justify-between py-1">
-              <Text className="text-sm text-text-sub-light">ภาษี (7%)</Text>
-              <Text className="text-sm text-text-main-light">{formatPrice(vat)}</Text>
+              <Text className={`text-sm ${textSub}`}>ภาษี (7%)</Text>
+              <Text className={`text-sm ${textMain}`}>{formatPrice(vat)}</Text>
             </View>
 
             <View className="flex-row justify-between py-1">
-              <Text className="text-sm text-text-sub-light">ค่าจัดส่ง</Text>
-              <Text className="text-sm text-text-main-light">คำนวณในขั้นตอนถัดไป</Text>
+              <Text className={`text-sm ${textSub}`}>ค่าจัดส่ง</Text>
+              <Text className={`text-sm ${textMain}`}>คำนวณในขั้นตอนถัดไป</Text>
             </View>
 
-            <View className="border-t border-border-light my-2" />
+            <View className={`border-t ${borderColor} my-2`} />
 
             <View className="flex-row justify-between py-1">
-              <Text className="text-base font-bold text-text-main-light">ยอดรวมทั้งสิ้น</Text>
+              <Text className={`text-base font-bold ${textMain}`}>ยอดรวมทั้งสิ้น</Text>
               <Text className="text-xl font-bold text-primary">{formatPrice(total)}</Text>
             </View>
           </View>
@@ -235,7 +240,7 @@ export default function CartScreen() {
       </ScrollView>
 
       {/* Bottom Action */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 py-3 pb-24">
+      <View className={`absolute bottom-0 left-0 right-0 ${cardBg} border-t ${borderColor} px-4 py-3 pb-24`}>
         <Button
           variant="primary"
           size="lg"

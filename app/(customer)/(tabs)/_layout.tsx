@@ -1,13 +1,15 @@
 /**
  * Customer Tabs Layout - Custom Bottom Tab Navigation
  * ใช้ Slot + Custom Tab Bar แทน Tabs component เพื่อรองรับ New Architecture
+ * รองรับ Dark Mode
  */
 
 import React from "react";
-import { View, Text, TouchableOpacity, Platform } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Slot, usePathname, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useThemeColors } from "../../../contexts";
 
 // Tab configuration
 const tabs = [
@@ -22,6 +24,7 @@ export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const router = useRouter();
+  const { isDark, raw } = useThemeColors();
 
   // หา active tab จาก pathname
   const getActiveTab = () => {
@@ -43,12 +46,12 @@ export default function TabsLayout() {
         <Slot />
       </View>
 
-      {/* Custom Tab Bar */}
+      {/* Custom Tab Bar - รองรับ Dark Mode */}
       <View
         style={{
-          backgroundColor: "#ffffff",
+          backgroundColor: isDark ? "#1e2936" : "#ffffff",
           borderTopWidth: 1,
-          borderTopColor: "#e5e7eb",
+          borderTopColor: isDark ? "#334155" : "#e5e7eb",
           paddingBottom: insets.bottom,
           paddingTop: 8,
           flexDirection: "row",
@@ -56,6 +59,7 @@ export default function TabsLayout() {
       >
         {tabs.map((tab) => {
           const isActive = activeTab === tab.name;
+          const inactiveColor = isDark ? "#64748b" : "#94a3b8";
 
           return (
             <TouchableOpacity
@@ -72,7 +76,7 @@ export default function TabsLayout() {
                 <Ionicons
                   name={isActive ? (tab.icon as any) : (`${tab.icon}-outline` as any)}
                   size={24}
-                  color={isActive ? "#137fec" : "#94a3b8"}
+                  color={isActive ? "#137fec" : inactiveColor}
                 />
 
                 {/* Badge */}
@@ -110,7 +114,7 @@ export default function TabsLayout() {
                   fontSize: 11,
                   fontWeight: "500",
                   marginTop: 2,
-                  color: isActive ? "#137fec" : "#94a3b8",
+                  color: isActive ? "#137fec" : inactiveColor,
                 }}
               >
                 {tab.title}

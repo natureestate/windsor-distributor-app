@@ -1,6 +1,7 @@
 /**
  * Home Screen - หน้าแรกสำหรับลูกค้า
  * แสดง Promo Banners, Categories, Featured Products, Active Order
+ * รองรับ Dark Mode
  */
 
 import React from "react";
@@ -10,8 +11,11 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Badge, IconButton, BannerCarousel } from "../../../components/ui";
+import { IconButton, BannerCarousel } from "../../../components/ui";
 import { ProductRow, CategoryRow } from "../../../components/product";
+
+// Context
+import { useThemeColors } from "../../../contexts";
 
 // Mock Data
 import {
@@ -24,6 +28,7 @@ import {
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { bgColor, cardBg, textMain, textSub, borderColor, iconMain, iconSub, isDark } = useThemeColors();
 
   // กรองสินค้า featured (best-seller)
   const featuredProducts = mockProductListItems.filter((p) => p.badges.includes("best-seller"));
@@ -32,7 +37,7 @@ export default function HomeScreen() {
   const newProducts = mockProductListItems.filter((p) => p.badges.includes("new"));
 
   return (
-    <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+    <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
@@ -43,14 +48,14 @@ export default function HomeScreen() {
           <View className="flex-row items-center justify-between">
             {/* Logo & Greeting */}
             <View>
-              <Text className="text-2xl font-bold text-text-main-light">WINDSOR</Text>
-              <Text className="text-sm text-text-sub-light">สวัสดี, {mockUser.displayName}</Text>
+              <Text className={`text-2xl font-bold ${textMain}`}>WINDSOR</Text>
+              <Text className={`text-sm ${textSub}`}>สวัสดี, {mockUser.displayName}</Text>
             </View>
 
             {/* Action buttons */}
             <View className="flex-row items-center gap-2">
               <IconButton
-                icon={<Ionicons name="notifications-outline" size={22} color="#0d141b" />}
+                icon={<Ionicons name="notifications-outline" size={22} color={iconMain} />}
                 variant="ghost"
                 badge={3}
               />
@@ -65,12 +70,12 @@ export default function HomeScreen() {
 
           {/* Search Bar */}
           <TouchableOpacity
-            className="flex-row items-center bg-white rounded-xl px-4 py-3 mt-4 border border-border-light"
+            className={`flex-row items-center ${cardBg} rounded-xl px-4 py-3 mt-4 border ${borderColor}`}
             onPress={() => router.push("/(customer)/(tabs)/catalog")}
           >
-            <Ionicons name="search-outline" size={20} color="#94a3b8" />
-            <Text className="flex-1 ml-3 text-text-sub-light">ค้นหาสินค้า...</Text>
-            <Ionicons name="options-outline" size={20} color="#94a3b8" />
+            <Ionicons name="search-outline" size={20} color={iconSub} />
+            <Text className={`flex-1 ml-3 ${textSub}`}>ค้นหาสินค้า...</Text>
+            <Ionicons name="options-outline" size={20} color={iconSub} />
           </TouchableOpacity>
         </View>
 
@@ -89,7 +94,7 @@ export default function HomeScreen() {
         {/* Categories */}
         <View className="mb-6">
           <View className="flex-row items-center justify-between px-4 mb-3">
-            <Text className="text-lg font-bold text-text-main-light">หมวดหมู่</Text>
+            <Text className={`text-lg font-bold ${textMain}`}>หมวดหมู่</Text>
             <TouchableOpacity onPress={() => router.push("/(customer)/(tabs)/catalog")}>
               <Text className="text-sm text-primary font-medium">ดูทั้งหมด</Text>
             </TouchableOpacity>

@@ -1,6 +1,7 @@
 /**
  * Catalog Screen - หน้ารายการสินค้า
  * แสดงสินค้าทั้งหมดพร้อม filter และ search
+ * รองรับ Dark Mode
  */
 
 import React, { useState, useMemo } from "react";
@@ -12,6 +13,9 @@ import { Ionicons } from "@expo/vector-icons";
 // Components
 import { SearchInput, Chip } from "../../../components/ui";
 import { ProductCard } from "../../../components/product";
+
+// Context
+import { useThemeColors } from "../../../contexts";
 
 // Mock Data
 import { mockProductListItems, mockCategories } from "../../../data/mockData";
@@ -28,6 +32,7 @@ const sortOptions = [
 export default function CatalogScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ category?: string; filter?: string }>();
+  const { bgColor, cardBg, textMain, textSub, borderColor, iconMain, iconSub, isDark } = useThemeColors();
 
   // State
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,11 +96,11 @@ export default function CatalogScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+    <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
       {/* Header */}
-      <View className="px-4 pt-2 pb-3 bg-white border-b border-border-light">
+      <View className={`px-4 pt-2 pb-3 ${cardBg} border-b ${borderColor}`}>
         <View className="flex-row items-center mb-3">
-          <Text className="text-xl font-bold text-text-main-light flex-1">สินค้าทั้งหมด</Text>
+          <Text className={`text-xl font-bold ${textMain} flex-1`}>สินค้าทั้งหมด</Text>
           <TouchableOpacity
             className="ml-2"
             onPress={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
@@ -103,7 +108,7 @@ export default function CatalogScreen() {
             <Ionicons
               name={viewMode === "grid" ? "list-outline" : "grid-outline"}
               size={22}
-              color="#0d141b"
+              color={iconMain}
             />
           </TouchableOpacity>
         </View>
@@ -118,7 +123,7 @@ export default function CatalogScreen() {
       </View>
 
       {/* Category Chips */}
-      <View className="bg-white py-3 border-b border-border-light">
+      <View className={`${cardBg} py-3 border-b ${borderColor}`}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -141,20 +146,20 @@ export default function CatalogScreen() {
       </View>
 
       {/* Sort & Filter Bar */}
-      <View className="flex-row items-center justify-between px-4 py-2 bg-white border-b border-border-light">
-        <Text className="text-sm text-text-sub-light">{filteredProducts.length} รายการ</Text>
+      <View className={`flex-row items-center justify-between px-4 py-2 ${cardBg} border-b ${borderColor}`}>
+        <Text className={`text-sm ${textSub}`}>{filteredProducts.length} รายการ</Text>
 
         <View className="flex-row items-center gap-3">
           <TouchableOpacity className="flex-row items-center">
-            <Ionicons name="swap-vertical-outline" size={16} color="#4c739a" />
-            <Text className="text-sm text-text-sub-light ml-1">
+            <Ionicons name="swap-vertical-outline" size={16} color={iconSub} />
+            <Text className={`text-sm ${textSub} ml-1`}>
               {sortOptions.find((s) => s.id === selectedSort)?.label}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="flex-row items-center">
-            <Ionicons name="filter-outline" size={16} color="#4c739a" />
-            <Text className="text-sm text-text-sub-light ml-1">กรอง</Text>
+            <Ionicons name="filter-outline" size={16} color={iconSub} />
+            <Text className={`text-sm ${textSub} ml-1`}>กรอง</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -169,8 +174,8 @@ export default function CatalogScreen() {
         contentContainerStyle={{ padding: 16 }}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center py-12">
-            <Ionicons name="search-outline" size={48} color="#d1d5db" />
-            <Text className="text-text-sub-light text-base mt-4">ไม่พบสินค้าที่ค้นหา</Text>
+            <Ionicons name="search-outline" size={48} color={isDark ? "#64748b" : "#d1d5db"} />
+            <Text className={`${textSub} text-base mt-4`}>ไม่พบสินค้าที่ค้นหา</Text>
           </View>
         }
       />

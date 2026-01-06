@@ -1,6 +1,7 @@
 /**
  * Profile Screen - หน้าโปรไฟล์ผู้ใช้
  * แสดงข้อมูลผู้ใช้และการตั้งค่า
+ * รองรับ Dark Mode
  */
 
 import React from "react";
@@ -8,6 +9,9 @@ import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+
+// Context
+import { useThemeColors } from "../../../contexts";
 
 // Mock Data
 import { mockUser } from "../../../data/mockData";
@@ -34,6 +38,7 @@ const menuSections = [
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { bgColor, cardBg, textMain, textSub, borderColor, iconSub, isDark } = useThemeColors();
 
   const handleMenuPress = (id: string) => {
     switch (id) {
@@ -68,7 +73,7 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary" edges={["top"]}>
       <ScrollView
-        className="flex-1 bg-background-light"
+        className={`flex-1 ${bgColor}`}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
       >
@@ -112,49 +117,49 @@ export default function ProfileScreen() {
         </View>
 
         {/* Quick Stats */}
-        <View className="mx-4 -mt-4 bg-white rounded-xl p-4 shadow-sm flex-row">
+        <View className={`mx-4 -mt-4 ${cardBg} rounded-xl p-4 shadow-sm flex-row`}>
           <TouchableOpacity className="flex-1 items-center" onPress={() => router.push("/(customer)/(tabs)/orders")}>
             <Text className="text-xl font-bold text-primary">
               {mockUser.recentOrdersSummary?.length || 0}
             </Text>
-            <Text className="text-xs text-text-sub-light mt-1">คำสั่งซื้อ</Text>
+            <Text className={`text-xs ${textSub} mt-1`}>คำสั่งซื้อ</Text>
           </TouchableOpacity>
-          <View className="w-px bg-border-light" />
+          <View className={`w-px ${isDark ? "bg-border-dark" : "bg-border-light"}`} />
           <View className="flex-1 items-center">
             <Text className="text-xl font-bold text-primary">0</Text>
-            <Text className="text-xs text-text-sub-light mt-1">คูปอง</Text>
+            <Text className={`text-xs ${textSub} mt-1`}>คูปอง</Text>
           </View>
-          <View className="w-px bg-border-light" />
+          <View className={`w-px ${isDark ? "bg-border-dark" : "bg-border-light"}`} />
           <View className="flex-1 items-center">
             <Text className="text-xl font-bold text-primary">0</Text>
-            <Text className="text-xs text-text-sub-light mt-1">แต้มสะสม</Text>
+            <Text className={`text-xs ${textSub} mt-1`}>แต้มสะสม</Text>
           </View>
         </View>
 
         {/* Menu Sections */}
         {menuSections.map((section) => (
           <View key={section.title} className="mt-6">
-            <Text className="text-sm font-semibold text-text-sub-light px-4 mb-2">
+            <Text className={`text-sm font-semibold ${textSub} px-4 mb-2`}>
               {section.title}
             </Text>
-            <View className="bg-white mx-4 rounded-xl overflow-hidden">
+            <View className={`${cardBg} mx-4 rounded-xl overflow-hidden`}>
               {section.items.map((item, index) => (
                 <TouchableOpacity
                   key={item.id}
                   className={`flex-row items-center px-4 py-3 ${
-                    index < section.items.length - 1 ? "border-b border-border-light" : ""
+                    index < section.items.length - 1 ? `border-b ${borderColor}` : ""
                   }`}
                   onPress={() => handleMenuPress(item.id)}
                 >
-                  <View className="w-8 h-8 bg-background-light rounded-full items-center justify-center">
+                  <View className={`w-8 h-8 ${bgColor} rounded-full items-center justify-center`}>
                     <Ionicons
                       name={item.icon as keyof typeof Ionicons.glyphMap}
                       size={18}
-                      color="#4c739a"
+                      color={iconSub}
                     />
                   </View>
-                  <Text className="flex-1 ml-3 text-sm text-text-main-light">{item.label}</Text>
-                  <Ionicons name="chevron-forward" size={18} color="#d1d5db" />
+                  <Text className={`flex-1 ml-3 text-sm ${textMain}`}>{item.label}</Text>
+                  <Ionicons name="chevron-forward" size={18} color={isDark ? "#64748b" : "#d1d5db"} />
                 </TouchableOpacity>
               ))}
             </View>
@@ -162,13 +167,13 @@ export default function ProfileScreen() {
         ))}
 
         {/* Logout */}
-        <TouchableOpacity className="mx-4 mt-6 bg-white rounded-xl p-4 flex-row items-center justify-center">
+        <TouchableOpacity className={`mx-4 mt-6 ${cardBg} rounded-xl p-4 flex-row items-center justify-center`}>
           <Ionicons name="log-out-outline" size={20} color="#ef4444" />
           <Text className="ml-2 text-red-500 font-medium">ออกจากระบบ</Text>
         </TouchableOpacity>
 
         {/* App version */}
-        <Text className="text-center text-xs text-text-sub-light mt-6">
+        <Text className={`text-center text-xs ${textSub} mt-6`}>
           WINDSOR Distributor v1.0.0
         </Text>
       </ScrollView>
