@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { TouchableOpacity, TouchableOpacityProps, View } from "react-native";
+import { TouchableOpacity, TouchableOpacityProps, View, Text } from "react-native";
 import { cn } from "../../lib/utils";
 
 type IconButtonVariant = "default" | "filled" | "outlined" | "ghost";
@@ -71,9 +71,9 @@ export function IconButton({
             badgeColor
           )}
         >
-          <View className="text-white text-xs font-bold">
+          <Text className="text-white text-xs font-bold">
             {badge > 99 ? "99+" : badge}
-          </View>
+          </Text>
         </View>
       )}
     </TouchableOpacity>
