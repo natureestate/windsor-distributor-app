@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 // Mock Data
 import { mockUser } from "../../../data/mockData";
 
-// Menu items
+// Menu items - ลบ "การตั้งค่า" ออกเพราะมีหน้า Settings แยกแล้ว (กดปุ่มเฟือง)
 const menuSections = [
   {
     title: "บัญชีของฉัน",
@@ -30,15 +30,6 @@ const menuSections = [
       { id: "reviews", icon: "star-outline", label: "รีวิวของฉัน" },
     ],
   },
-  {
-    title: "การตั้งค่า",
-    items: [
-      { id: "notifications", icon: "notifications-outline", label: "การแจ้งเตือน" },
-      { id: "language", icon: "language-outline", label: "ภาษา" },
-      { id: "help", icon: "help-circle-outline", label: "ช่วยเหลือ" },
-      { id: "about", icon: "information-circle-outline", label: "เกี่ยวกับแอป" },
-    ],
-  },
 ];
 
 export default function ProfileScreen() {
@@ -46,8 +37,28 @@ export default function ProfileScreen() {
 
   const handleMenuPress = (id: string) => {
     switch (id) {
+      case "profile":
+        // ไปหน้าแก้ไขข้อมูลส่วนตัว
+        router.push("/(customer)/edit-profile");
+        break;
       case "orders":
         router.push("/(customer)/(tabs)/orders");
+        break;
+      case "addresses":
+        // TODO: สร้างหน้าจัดการที่อยู่
+        alert("เปิดหน้าที่อยู่จัดส่ง");
+        break;
+      case "payment":
+        // TODO: สร้างหน้าวิธีชำระเงิน
+        alert("เปิดหน้าวิธีชำระเงิน");
+        break;
+      case "favorites":
+        // TODO: สร้างหน้าสินค้าที่ชอบ
+        alert("เปิดหน้าสินค้าที่ชอบ");
+        break;
+      case "reviews":
+        // TODO: สร้างหน้ารีวิวของฉัน
+        alert("เปิดหน้ารีวิวของฉัน");
         break;
       default:
         alert(`เปิดหน้า ${id}`);
