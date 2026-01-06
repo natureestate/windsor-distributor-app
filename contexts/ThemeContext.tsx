@@ -119,6 +119,7 @@ export function useThemeColors() {
     // Background colors
     bgColor: isDark ? "bg-background-dark" : "bg-background-light",
     cardBg: isDark ? "bg-surface-dark" : "bg-white",
+    surfaceBg: isDark ? "bg-surface-dark" : "bg-white", // สำหรับ Modal, Bottom Sheet
 
     // Text colors
     textMain: isDark ? "text-text-main-dark" : "text-text-main-light",
@@ -136,6 +137,7 @@ export function useThemeColors() {
     raw: {
       bgColor: isDark ? "#101922" : "#f6f7f8",
       cardBg: isDark ? "#1e2936" : "#ffffff",
+      surfaceBg: isDark ? "#1e2936" : "#ffffff",
       textMain: isDark ? "#e2e8f0" : "#0d141b",
       textSub: isDark ? "#94a3b8" : "#4c739a",
       borderColor: isDark ? "#334155" : "#e2e8f0",
