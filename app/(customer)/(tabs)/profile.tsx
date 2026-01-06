@@ -1,7 +1,7 @@
 /**
  * Profile Screen - หน้าโปรไฟล์ผู้ใช้
  * แสดงข้อมูลผู้ใช้และการตั้งค่า
- * รองรับ Dark Mode
+ * รองรับ Dark Mode และ Guest Mode (ต้อง Login เพื่อดูโปรไฟล์)
  */
 
 import React from "react";
@@ -10,8 +10,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
+// Components
+import { Button } from "../../../components/ui";
+
 // Context
-import { useThemeColors } from "../../../contexts";
+import { useThemeColors, useAuth } from "../../../contexts";
 
 // Mock Data
 import { mockUser } from "../../../data/mockData";
@@ -39,6 +42,7 @@ const menuSections = [
 export default function ProfileScreen() {
   const router = useRouter();
   const { bgColor, cardBg, textMain, textSub, borderColor, iconSub, isDark } = useThemeColors();
+  const { user, isAuthenticated, requireAuth, logout } = useAuth();
 
   // ฟังก์ชันกดเมนู
   const handleMenuPress = (id: string) => {
@@ -78,13 +82,64 @@ export default function ProfileScreen() {
       {
         text: "ออกจากระบบ",
         style: "destructive",
-        onPress: () => {
-          // Mock logout - ไปหน้า Login
-          router.replace("/(auth)/login");
+        onPress: async () => {
+          await logout();
         },
       },
     ]);
   };
+
+  // Guest Mode - ยังไม่ได้ Login
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
+        {/* Header */}
+        <View className="bg-primary px-4 pt-2 pb-8">
+          <View className="flex-row items-center justify-between mb-4">
+            <View className="w-10 h-10" />
+            <Text className="text-lg font-semibold text-white">บัญชีของฉัน</Text>
+            <TouchableOpacity
+              className="w-10 h-10 bg-white/20 rounded-full items-center justify-center"
+              onPress={() => router.push("/(customer)/settings")}
+            >
+              <Ionicons name="settings-outline" size={20} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View className="flex-1 items-center justify-center px-4 -mt-8">
+          <View className="w-24 h-24 bg-primary/10 rounded-full items-center justify-center mb-4">
+            <Ionicons name="person-outline" size={48} color="#137fec" />
+          </View>
+          <Text className={`text-xl font-bold ${textMain} mt-2`}>ยินดีต้อนรับ</Text>
+          <Text className={`text-sm ${textSub} mt-2 text-center px-8`}>
+            เข้าสู่ระบบเพื่อจัดการบัญชี ดูคำสั่งซื้อ และรับสิทธิพิเศษ
+          </Text>
+
+          <View className="w-full mt-8 px-4">
+            <Button
+              variant="primary"
+              size="lg"
+              fullWidth
+              onPress={() => requireAuth("เข้าสู่ระบบเพื่อจัดการบัญชีของคุณ")}
+            >
+              เข้าสู่ระบบ
+            </Button>
+          </View>
+
+          <TouchableOpacity
+            className="mt-4"
+            onPress={() => router.push("/(customer)/(tabs)/catalog")}
+          >
+            <Text className={`text-sm ${textSub}`}>หรือ ดูสินค้าต่อ</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // ใช้ข้อมูลจาก user context หรือ mockUser
+  const displayUser = user || mockUser;
 
   return (
     <SafeAreaView className="flex-1 bg-primary" edges={["top"]}>
@@ -112,14 +167,14 @@ export default function ProfileScreen() {
           <View className="flex-row items-center">
             {/* Avatar */}
             <View className="w-16 h-16 rounded-full border-2 border-white overflow-hidden">
-              <Image source={{ uri: mockUser.avatarUrl }} className="w-full h-full" />
+              <Image source={{ uri: displayUser.avatarUrl }} className="w-full h-full" />
             </View>
 
             {/* User info */}
             <View className="flex-1 ml-4">
-              <Text className="text-lg font-bold text-white">{mockUser.displayName}</Text>
-              <Text className="text-sm text-white/80">{mockUser.email}</Text>
-              <Text className="text-sm text-white/80">{mockUser.phoneNumber}</Text>
+              <Text className="text-lg font-bold text-white">{displayUser.displayName}</Text>
+              <Text className="text-sm text-white/80">{displayUser.email}</Text>
+              <Text className="text-sm text-white/80">{displayUser.phoneNumber}</Text>
             </View>
 
             {/* ปุ่มดินสอ - แก้ไขโปรไฟล์ */}

@@ -1,7 +1,7 @@
 /**
  * Cart Screen - หน้าตะกร้าสินค้า
  * แสดงรายการสินค้าในตะกร้า, ส่วนลด, และสรุปราคา
- * รองรับ Dark Mode
+ * รองรับ Dark Mode และ Guest Mode (ต้อง Login เพื่อดูตะกร้า)
  */
 
 import React, { useState } from "react";
@@ -14,7 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Button, Input } from "../../../components/ui";
 
 // Context
-import { useThemeColors } from "../../../contexts";
+import { useThemeColors, useAuth } from "../../../contexts";
 
 // Mock Data
 import { mockCartItems } from "../../../data/mockData";
@@ -23,7 +23,8 @@ import { CartItem } from "../../../types/cart";
 
 export default function CartScreen() {
   const router = useRouter();
-  const { bgColor, cardBg, textMain, textSub, borderColor, iconMain, isDark } = useThemeColors();
+  const { bgColor, cardBg, textMain, textSub, borderColor, iconMain, iconSub, isDark } = useThemeColors();
+  const { isAuthenticated, requireAuth } = useAuth();
 
   // State
   const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
@@ -132,6 +133,41 @@ export default function CartScreen() {
       </View>
     </View>
   );
+
+  // Guest Mode - ยังไม่ได้ Login
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaView className={`flex-1 ${bgColor}`} edges={["top"]}>
+        {/* Header */}
+        <View className={`px-4 py-3 ${cardBg} border-b ${borderColor}`}>
+          <Text className={`text-xl font-bold ${textMain}`}>ตะกร้าสินค้า</Text>
+        </View>
+
+        <View className="flex-1 items-center justify-center px-4">
+          <View className="w-20 h-20 bg-primary/10 rounded-full items-center justify-center mb-4">
+            <Ionicons name="cart-outline" size={40} color="#137fec" />
+          </View>
+          <Text className={`text-lg font-medium ${textMain} mt-2`}>เข้าสู่ระบบเพื่อดูตะกร้า</Text>
+          <Text className={`text-sm ${textSub} mt-2 text-center px-8`}>
+            เข้าสู่ระบบเพื่อเพิ่มสินค้าลงตะกร้าและดำเนินการสั่งซื้อ
+          </Text>
+          <Button
+            variant="primary"
+            className="mt-6"
+            onPress={() => requireAuth("กรุณาเข้าสู่ระบบเพื่อใช้งานตะกร้าสินค้า")}
+          >
+            เข้าสู่ระบบ
+          </Button>
+          <TouchableOpacity
+            className="mt-4"
+            onPress={() => router.push("/(customer)/(tabs)/catalog")}
+          >
+            <Text className={`text-sm ${textSub}`}>หรือ ดูสินค้าต่อ</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   // Empty cart
   if (cartItems.length === 0) {

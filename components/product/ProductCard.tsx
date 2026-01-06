@@ -1,23 +1,25 @@
 /**
  * ProductCard Component สำหรับ WINDSOR Distributor App
  * แสดงสินค้าในรูปแบบ card ตาม design reference
- * รองรับ Dark Mode
+ * รองรับ Dark Mode และ Guest Mode (ต้อง Login ก่อนกดถูกใจ/เพิ่มตะกร้า)
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { ProductListItem, ProductBadge } from "../../types/product";
 import { Badge, Rating } from "../ui";
 import { cn, formatPrice } from "../../lib/utils";
-import { useThemeColors } from "../../contexts";
+import { useThemeColors, useAuth } from "../../contexts";
 
 interface ProductCardProps {
   product: ProductListItem;
   variant?: "grid" | "list";
   onPress?: () => void;
   onAddToCart?: () => void;
+  onFavorite?: (isFavorite: boolean) => void;
+  isFavorite?: boolean;
   className?: string;
 }
 
@@ -61,10 +63,14 @@ export function ProductCard({
   variant = "grid",
   onPress,
   onAddToCart,
+  onFavorite,
+  isFavorite: isFavoriteProp = false,
   className,
 }: ProductCardProps) {
   const router = useRouter();
   const { cardBg, textMain, textSub, isDark } = useThemeColors();
+  const { requireAuth } = useAuth();
+  const [isFavorite, setIsFavorite] = useState(isFavoriteProp);
 
   const handlePress = () => {
     if (onPress) {
@@ -74,12 +80,30 @@ export function ProductCard({
     }
   };
 
+  // กดถูกใจ - ต้อง Login ก่อน
+  const handleFavorite = () => {
+    if (!requireAuth("กรุณาเข้าสู่ระบบเพื่อเพิ่มสินค้าในรายการโปรด")) {
+      return;
+    }
+    const newFavorite = !isFavorite;
+    setIsFavorite(newFavorite);
+    onFavorite?.(newFavorite);
+  };
+
+  // เพิ่มตะกร้า - ต้อง Login ก่อน
+  const handleAddToCart = () => {
+    if (!requireAuth("กรุณาเข้าสู่ระบบเพื่อเพิ่มสินค้าลงตะกร้า")) {
+      return;
+    }
+    onAddToCart?.();
+  };
+
   if (variant === "list") {
     return (
       <ProductCardList
         product={product}
         onPress={handlePress}
-        onAddToCart={onAddToCart}
+        onAddToCart={onAddToCart ? handleAddToCart : undefined}
         className={className}
       />
     );
@@ -108,12 +132,20 @@ export function ProductCard({
           </View>
         )}
 
-        {/* Favorite button */}
+        {/* Favorite button - กดแล้วต้อง Login */}
         <TouchableOpacity
           className={`absolute top-2 right-2 w-8 h-8 ${isDark ? "bg-surface-dark/80" : "bg-white/80"} rounded-full items-center justify-center`}
           hitSlop={8}
+          onPress={(e) => {
+            e.stopPropagation();
+            handleFavorite();
+          }}
         >
-          <Ionicons name="heart-outline" size={18} color={isDark ? "#e2e8f0" : "#0d141b"} />
+          <Ionicons
+            name={isFavorite ? "heart" : "heart-outline"}
+            size={18}
+            color={isFavorite ? "#ef4444" : isDark ? "#e2e8f0" : "#0d141b"}
+          />
         </TouchableOpacity>
       </View>
 
@@ -136,13 +168,13 @@ export function ProductCard({
         <View className="flex-row items-center justify-between">
           <Text className="text-base font-bold text-primary">{formatPrice(product.basePrice)}</Text>
 
-          {/* ปุ่มเพิ่มลงตะกร้า */}
+          {/* ปุ่มเพิ่มลงตะกร้า - กดแล้วต้อง Login */}
           {onAddToCart && !product.isConfigurable && (
             <TouchableOpacity
               className="w-8 h-8 bg-primary rounded-full items-center justify-center"
               onPress={(e) => {
                 e.stopPropagation();
-                onAddToCart();
+                handleAddToCart();
               }}
             >
               <Ionicons name="add" size={20} color="#ffffff" />
@@ -162,6 +194,15 @@ export function ProductCard({
  */
 function ProductCardList({ product, onPress, onAddToCart, className }: ProductCardProps) {
   const { cardBg, textMain, textSub } = useThemeColors();
+  const { requireAuth } = useAuth();
+
+  // เพิ่มตะกร้า - ต้อง Login ก่อน
+  const handleAddToCart = () => {
+    if (!requireAuth("กรุณาเข้าสู่ระบบเพื่อเพิ่มสินค้าลงตะกร้า")) {
+      return;
+    }
+    onAddToCart?.();
+  };
 
   return (
     <TouchableOpacity
@@ -222,7 +263,7 @@ function ProductCardList({ product, onPress, onAddToCart, className }: ProductCa
               className="px-3 py-1.5 bg-primary rounded-lg"
               onPress={(e) => {
                 e.stopPropagation();
-                onAddToCart();
+                handleAddToCart();
               }}
             >
               <Text className="text-white text-xs font-medium">เพิ่ม</Text>
