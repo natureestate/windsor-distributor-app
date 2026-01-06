@@ -67,7 +67,11 @@ export default function ProfileScreen() {
           <View className="flex-row items-center justify-between mb-4">
             <View className="w-10 h-10" />
             <Text className="text-lg font-semibold text-white">บัญชีของฉัน</Text>
-            <TouchableOpacity className="w-10 h-10 bg-white/20 rounded-full items-center justify-center">
+            {/* ปุ่มเฟือง - ไปหน้า Settings */}
+            <TouchableOpacity
+              className="w-10 h-10 bg-white/20 rounded-full items-center justify-center"
+              onPress={() => router.push("/(customer)/settings")}
+            >
               <Ionicons name="settings-outline" size={20} color="#ffffff" />
             </TouchableOpacity>
           </View>
@@ -86,8 +90,11 @@ export default function ProfileScreen() {
               <Text className="text-sm text-white/80">{mockUser.phoneNumber}</Text>
             </View>
 
-            {/* Edit button */}
-            <TouchableOpacity className="w-10 h-10 bg-white/20 rounded-full items-center justify-center">
+            {/* ปุ่มดินสอ - แก้ไขโปรไฟล์ */}
+            <TouchableOpacity
+              className="w-10 h-10 bg-white/20 rounded-full items-center justify-center"
+              onPress={() => handleMenuPress("profile")}
+            >
               <Ionicons name="pencil-outline" size={18} color="#ffffff" />
             </TouchableOpacity>
           </View>
