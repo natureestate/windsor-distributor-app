@@ -9,4 +9,3 @@ export default function Index() {
   // Redirect ไปยังหน้า Customer Home โดยตรง
   return <Redirect href="/(customer)" />;
 }
-

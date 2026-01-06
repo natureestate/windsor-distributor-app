@@ -52,19 +52,13 @@ export function Rating({
     for (let i = 0; i < maxRating; i++) {
       if (i < fullStars) {
         // ดาวเต็ม
-        stars.push(
-          <Ionicons key={i} name="star" size={starSize} color="#f59e0b" />
-        );
+        stars.push(<Ionicons key={i} name="star" size={starSize} color="#f59e0b" />);
       } else if (i === fullStars && hasHalfStar) {
         // ดาวครึ่ง
-        stars.push(
-          <Ionicons key={i} name="star-half" size={starSize} color="#f59e0b" />
-        );
+        stars.push(<Ionicons key={i} name="star-half" size={starSize} color="#f59e0b" />);
       } else {
         // ดาวว่าง
-        stars.push(
-          <Ionicons key={i} name="star-outline" size={starSize} color="#d1d5db" />
-        );
+        stars.push(<Ionicons key={i} name="star-outline" size={starSize} color="#d1d5db" />);
       }
     }
 
@@ -85,13 +79,10 @@ export function Rating({
 
       {/* Review count */}
       {showCount && reviewCount > 0 && (
-        <Text className={cn("ml-1 text-text-sub-light", textSizes[size])}>
-          ({reviewCount})
-        </Text>
+        <Text className={cn("ml-1 text-text-sub-light", textSizes[size])}>({reviewCount})</Text>
       )}
     </View>
   );
 }
 
 export default Rating;
-

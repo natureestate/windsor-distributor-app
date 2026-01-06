@@ -4,13 +4,7 @@
  */
 
 import React, { useState, useMemo } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -86,10 +80,7 @@ export default function CatalogScreen() {
     const isEven = index % 2 === 0;
 
     return (
-      <View
-        className={`flex-1 ${isEven ? "pr-1.5" : "pl-1.5"} mb-3`}
-        style={{ maxWidth: "50%" }}
-      >
+      <View className={`flex-1 ${isEven ? "pr-1.5" : "pl-1.5"} mb-3`} style={{ maxWidth: "50%" }}>
         <ProductCard
           product={item}
           variant={viewMode}
@@ -107,9 +98,7 @@ export default function CatalogScreen() {
           <TouchableOpacity className="mr-3" onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color="#0d141b" />
           </TouchableOpacity>
-          <Text className="text-xl font-bold text-text-main-light flex-1">
-            สินค้าทั้งหมด
-          </Text>
+          <Text className="text-xl font-bold text-text-main-light flex-1">สินค้าทั้งหมด</Text>
           <TouchableOpacity
             className="ml-2"
             onPress={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
@@ -156,9 +145,7 @@ export default function CatalogScreen() {
 
       {/* Sort & Filter Bar */}
       <View className="flex-row items-center justify-between px-4 py-2 bg-white border-b border-border-light">
-        <Text className="text-sm text-text-sub-light">
-          {filteredProducts.length} รายการ
-        </Text>
+        <Text className="text-sm text-text-sub-light">{filteredProducts.length} รายการ</Text>
 
         <View className="flex-row items-center gap-3">
           <TouchableOpacity className="flex-row items-center">
@@ -186,13 +173,10 @@ export default function CatalogScreen() {
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center py-12">
             <Ionicons name="search-outline" size={48} color="#d1d5db" />
-            <Text className="text-text-sub-light text-base mt-4">
-              ไม่พบสินค้าที่ค้นหา
-            </Text>
+            <Text className="text-text-sub-light text-base mt-4">ไม่พบสินค้าที่ค้นหา</Text>
           </View>
         }
       />
     </SafeAreaView>
   );
 }
-

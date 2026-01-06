@@ -74,4 +74,3 @@ export type CartAction =
   | { type: "REMOVE_DISCOUNT" }
   | { type: "CLEAR_CART" }
   | { type: "SET_CART"; payload: Cart };
-

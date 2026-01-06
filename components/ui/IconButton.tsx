@@ -71,9 +71,7 @@ export function IconButton({
             badgeColor
           )}
         >
-          <Text className="text-white text-xs font-bold">
-            {badge > 99 ? "99+" : badge}
-          </Text>
+          <Text className="text-white text-xs font-bold">{badge > 99 ? "99+" : badge}</Text>
         </View>
       )}
     </TouchableOpacity>
@@ -81,4 +79,3 @@ export function IconButton({
 }
 
 export default IconButton;
-

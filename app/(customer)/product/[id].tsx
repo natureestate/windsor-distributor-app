@@ -4,14 +4,7 @@
  */
 
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -35,9 +28,7 @@ export default function ProductDetailScreen() {
 
   // State
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(
-    product.constraints?.colors[0]?.id || ""
-  );
+  const [selectedColor, setSelectedColor] = useState(product.constraints?.colors[0]?.id || "");
   const [selectedGlass, setSelectedGlass] = useState(
     product.constraints?.glassTypes?.[0]?.id || ""
   );
@@ -99,9 +90,7 @@ export default function ProductDetailScreen() {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
             onMomentumScrollEnd={(e) => {
-              const index = Math.round(
-                e.nativeEvent.contentOffset.x / SCREEN_WIDTH
-              );
+              const index = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
               setCurrentImageIndex(index);
             }}
           >
@@ -131,7 +120,10 @@ export default function ProductDetailScreen() {
           {product.badges.length > 0 && (
             <View className="absolute top-14 left-4 gap-1">
               {product.badges.map((badge) => (
-                <Badge key={badge} variant={badge === "best-seller" ? "primary" : badge === "new" ? "new" : "eco"}>
+                <Badge
+                  key={badge}
+                  variant={badge === "best-seller" ? "primary" : badge === "new" ? "new" : "eco"}
+                >
                   {badge === "best-seller" ? "BEST SELLER" : badge.toUpperCase()}
                 </Badge>
               ))}
@@ -144,17 +136,11 @@ export default function ProductDetailScreen() {
           {/* Name & Price */}
           <View className="flex-row items-start justify-between mb-2">
             <View className="flex-1 mr-4">
-              <Text className="text-xl font-bold text-text-main-light">
-                {product.nameTh}
-              </Text>
+              <Text className="text-xl font-bold text-text-main-light">{product.nameTh}</Text>
               {product.series && (
-                <Text className="text-sm text-text-sub-light mt-0.5">
-                  {product.series}
-                </Text>
+                <Text className="text-sm text-text-sub-light mt-0.5">{product.series}</Text>
               )}
-              <Text className="text-xs text-text-sub-light mt-0.5">
-                SKU: {product.sku}
-              </Text>
+              <Text className="text-xs text-text-sub-light mt-0.5">SKU: {product.sku}</Text>
             </View>
             <View className="items-end">
               <Text className="text-2xl font-bold text-primary">
@@ -189,9 +175,7 @@ export default function ProductDetailScreen() {
                 className="flex-row items-center bg-primary/10 px-3 py-1.5 rounded-full"
               >
                 <Ionicons name="checkmark-circle" size={14} color="#137fec" />
-                <Text className="text-xs text-primary ml-1 font-medium">
-                  {feature}
-                </Text>
+                <Text className="text-xs text-primary ml-1 font-medium">{feature}</Text>
               </View>
             ))}
           </View>
@@ -199,17 +183,13 @@ export default function ProductDetailScreen() {
           {/* Color Options (ถ้ามี) */}
           {product.constraints?.colors && (
             <View className="mb-6">
-              <Text className="text-sm font-semibold text-text-main-light mb-3">
-                สี
-              </Text>
+              <Text className="text-sm font-semibold text-text-main-light mb-3">สี</Text>
               <View className="flex-row flex-wrap gap-2">
                 {product.constraints.colors.map((color) => (
                   <TouchableOpacity
                     key={color.id}
                     className={`w-10 h-10 rounded-full border-2 items-center justify-center ${
-                      selectedColor === color.id
-                        ? "border-primary"
-                        : "border-border-light"
+                      selectedColor === color.id ? "border-primary" : "border-border-light"
                     }`}
                     onPress={() => setSelectedColor(color.id)}
                   >
@@ -225,9 +205,7 @@ export default function ProductDetailScreen() {
 
           {/* Specifications */}
           <View className="mb-6">
-            <Text className="text-sm font-semibold text-text-main-light mb-3">
-              รายละเอียด
-            </Text>
+            <Text className="text-sm font-semibold text-text-main-light mb-3">รายละเอียด</Text>
             <View className="bg-background-light rounded-xl p-4">
               {Object.entries(product.specs).map(([key, value]) => (
                 <View
@@ -237,9 +215,7 @@ export default function ProductDetailScreen() {
                   <Text className="text-sm text-text-sub-light capitalize">
                     {key.replace(/([A-Z])/g, " $1").trim()}
                   </Text>
-                  <Text className="text-sm font-medium text-text-main-light">
-                    {value}
-                  </Text>
+                  <Text className="text-sm font-medium text-text-main-light">{value}</Text>
                 </View>
               ))}
             </View>
@@ -252,16 +228,16 @@ export default function ProductDetailScreen() {
                 product.stockStatus === "in-stock"
                   ? "bg-green-500"
                   : product.stockStatus === "pre-order"
-                  ? "bg-amber-500"
-                  : "bg-red-500"
+                    ? "bg-amber-500"
+                    : "bg-red-500"
               }`}
             />
             <Text className="text-sm text-text-sub-light">
               {product.stockStatus === "in-stock"
                 ? "มีสินค้า"
                 : product.stockStatus === "pre-order"
-                ? `สั่งจอง (ผลิต ${product.leadTimeDays} วัน)`
-                : "สินค้าหมด"}
+                  ? `สั่งจอง (ผลิต ${product.leadTimeDays} วัน)`
+                  : "สินค้าหมด"}
             </Text>
           </View>
         </View>
@@ -300,4 +276,3 @@ export default function ProductDetailScreen() {
     </SafeAreaView>
   );
 }
-

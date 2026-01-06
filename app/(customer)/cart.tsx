@@ -4,14 +4,7 @@
  */
 
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -75,10 +68,7 @@ export default function CartScreen() {
 
   // Render cart item
   const renderCartItem = (item: CartItem) => (
-    <View
-      key={item.id}
-      className="bg-white rounded-xl p-4 mb-3 flex-row"
-    >
+    <View key={item.id} className="bg-white rounded-xl p-4 mb-3 flex-row">
       {/* รูปภาพ */}
       <Image
         source={{ uri: item.productSnapshot.thumbnailUrl }}
@@ -90,10 +80,7 @@ export default function CartScreen() {
       <View className="flex-1 ml-3">
         <View className="flex-row items-start justify-between">
           <View className="flex-1 mr-2">
-            <Text
-              className="text-sm font-medium text-text-main-light"
-              numberOfLines={2}
-            >
+            <Text className="text-sm font-medium text-text-main-light" numberOfLines={2}>
               {item.productSnapshot.nameTh}
             </Text>
             <Text className="text-xs text-text-sub-light mt-0.5">
@@ -102,10 +89,7 @@ export default function CartScreen() {
           </View>
 
           {/* ปุ่มลบ */}
-          <TouchableOpacity
-            onPress={() => removeItem(item.id)}
-            hitSlop={8}
-          >
+          <TouchableOpacity onPress={() => removeItem(item.id)} hitSlop={8}>
             <Ionicons name="trash-outline" size={18} color="#ef4444" />
           </TouchableOpacity>
         </View>
@@ -119,9 +103,7 @@ export default function CartScreen() {
 
         {/* ราคาและจำนวน */}
         <View className="flex-row items-center justify-between mt-3">
-          <Text className="text-base font-bold text-primary">
-            {formatPrice(item.totalPrice)}
-          </Text>
+          <Text className="text-base font-bold text-primary">{formatPrice(item.totalPrice)}</Text>
 
           {/* Quantity controls */}
           <View className="flex-row items-center bg-background-light rounded-lg">
@@ -152,9 +134,7 @@ export default function CartScreen() {
       <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
         <View className="flex-1 items-center justify-center px-4">
           <Ionicons name="cart-outline" size={64} color="#d1d5db" />
-          <Text className="text-lg font-medium text-text-main-light mt-4">
-            ตะกร้าว่างเปล่า
-          </Text>
+          <Text className="text-lg font-medium text-text-main-light mt-4">ตะกร้าว่างเปล่า</Text>
           <Text className="text-sm text-text-sub-light mt-1 text-center">
             เพิ่มสินค้าลงตะกร้าเพื่อเริ่มช้อปปิ้ง
           </Text>
@@ -174,12 +154,8 @@ export default function CartScreen() {
     <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
       {/* Header */}
       <View className="px-4 py-3 bg-white border-b border-border-light">
-        <Text className="text-xl font-bold text-text-main-light">
-          ตะกร้าสินค้า
-        </Text>
-        <Text className="text-sm text-text-sub-light">
-          {cartItems.length} รายการ
-        </Text>
+        <Text className="text-xl font-bold text-text-main-light">ตะกร้าสินค้า</Text>
+        <Text className="text-sm text-text-sub-light">{cartItems.length} รายการ</Text>
       </View>
 
       <ScrollView
@@ -192,9 +168,7 @@ export default function CartScreen() {
 
         {/* Discount Code */}
         <View className="bg-white rounded-xl p-4 mb-3">
-          <Text className="text-sm font-semibold text-text-main-light mb-3">
-            รหัสส่วนลด
-          </Text>
+          <Text className="text-sm font-semibold text-text-main-light mb-3">รหัสส่วนลด</Text>
           <View className="flex-row gap-2">
             <View className="flex-1">
               <Input
@@ -204,11 +178,7 @@ export default function CartScreen() {
                 autoCapitalize="characters"
               />
             </View>
-            <Button
-              variant="outline"
-              onPress={applyDiscount}
-              disabled={!discountCode}
-            >
+            <Button variant="outline" onPress={applyDiscount} disabled={!discountCode}>
               ใช้
             </Button>
           </View>
@@ -224,50 +194,36 @@ export default function CartScreen() {
 
         {/* Order Summary */}
         <View className="bg-white rounded-xl p-4">
-          <Text className="text-sm font-semibold text-text-main-light mb-3">
-            สรุปคำสั่งซื้อ
-          </Text>
+          <Text className="text-sm font-semibold text-text-main-light mb-3">สรุปคำสั่งซื้อ</Text>
 
           <View className="space-y-2">
             <View className="flex-row justify-between py-1">
               <Text className="text-sm text-text-sub-light">ยอดรวมสินค้า</Text>
-              <Text className="text-sm text-text-main-light">
-                {formatPrice(subtotal)}
-              </Text>
+              <Text className="text-sm text-text-main-light">{formatPrice(subtotal)}</Text>
             </View>
 
             {appliedDiscount > 0 && (
               <View className="flex-row justify-between py-1">
                 <Text className="text-sm text-green-600">ส่วนลด</Text>
-                <Text className="text-sm text-green-600">
-                  -{formatPrice(appliedDiscount)}
-                </Text>
+                <Text className="text-sm text-green-600">-{formatPrice(appliedDiscount)}</Text>
               </View>
             )}
 
             <View className="flex-row justify-between py-1">
               <Text className="text-sm text-text-sub-light">ภาษี (7%)</Text>
-              <Text className="text-sm text-text-main-light">
-                {formatPrice(vat)}
-              </Text>
+              <Text className="text-sm text-text-main-light">{formatPrice(vat)}</Text>
             </View>
 
             <View className="flex-row justify-between py-1">
               <Text className="text-sm text-text-sub-light">ค่าจัดส่ง</Text>
-              <Text className="text-sm text-text-main-light">
-                คำนวณในขั้นตอนถัดไป
-              </Text>
+              <Text className="text-sm text-text-main-light">คำนวณในขั้นตอนถัดไป</Text>
             </View>
 
             <View className="border-t border-border-light my-2" />
 
             <View className="flex-row justify-between py-1">
-              <Text className="text-base font-bold text-text-main-light">
-                ยอดรวมทั้งสิ้น
-              </Text>
-              <Text className="text-xl font-bold text-primary">
-                {formatPrice(total)}
-              </Text>
+              <Text className="text-base font-bold text-text-main-light">ยอดรวมทั้งสิ้น</Text>
+              <Text className="text-xl font-bold text-primary">{formatPrice(total)}</Text>
             </View>
           </View>
         </View>
@@ -287,4 +243,3 @@ export default function CartScreen() {
     </SafeAreaView>
   );
 }
-

@@ -173,12 +173,7 @@ export const mockProducts: Product[] = [
       "Experience seamless indoor-outdoor living with the WINDSOR Signature Sliding Door. Engineered with high-quality vinyl material, it offers superior noise reduction technology and thermal insulation.",
     descriptionTh:
       "สัมผัสประสบการณ์การใช้ชีวิตทั้งภายในและภายนอกอย่างไร้รอยต่อกับประตูบานเลื่อน WINDSOR Signature ผลิตจากวัสดุไวนิลคุณภาพสูง ช่วยลดเสียงรบกวนและเป็นฉนวนกันความร้อนได้ดีเยี่ยม",
-    features: [
-      "Noise Reduction",
-      "UV Protection",
-      "High Security",
-      "Waterproof",
-    ],
+    features: ["Noise Reduction", "UV Protection", "High Security", "Waterproof"],
     featuresTh: ["ลดเสียงรบกวน", "กันรังสี UV", "ปลอดภัยสูง", "กันน้ำ"],
     specs: {
       material: "Premium uPVC",
@@ -215,8 +210,7 @@ export const mockProducts: Product[] = [
     badges: ["eco"],
     description:
       "Energy efficient casement window with double glazed glass for superior thermal insulation.",
-    descriptionTh:
-      "หน้าต่างบานเปิดประหยัดพลังงาน พร้อมกระจก 2 ชั้น เป็นฉนวนกันความร้อนได้ดีเยี่ยม",
+    descriptionTh: "หน้าต่างบานเปิดประหยัดพลังงาน พร้อมกระจก 2 ชั้น เป็นฉนวนกันความร้อนได้ดีเยี่ยม",
     features: ["Energy Efficient", "Double Glazed", "Easy Clean", "Ventilation"],
     featuresTh: ["ประหยัดพลังงาน", "กระจก 2 ชั้น", "ทำความสะอาดง่าย", "ระบายอากาศดี"],
     specs: {
@@ -289,10 +283,8 @@ export const mockProducts: Product[] = [
     rating: 4.5,
     reviewCount: 67,
     badges: [],
-    description:
-      "Top-hinged awning window perfect for ventilation while keeping rain out.",
-    descriptionTh:
-      "หน้าต่างบานกระทุ้งเปิดด้านบน เหมาะสำหรับระบายอากาศโดยไม่ให้ฝนเข้า",
+    description: "Top-hinged awning window perfect for ventilation while keeping rain out.",
+    descriptionTh: "หน้าต่างบานกระทุ้งเปิดด้านบน เหมาะสำหรับระบายอากาศโดยไม่ให้ฝนเข้า",
     features: ["Top Hinged", "Rain Protection", "Easy Operation", "Compact Design"],
     featuresTh: ["เปิดด้านบน", "กันฝน", "ใช้งานง่าย", "ดีไซน์กะทัดรัด"],
     specs: {
@@ -325,10 +317,8 @@ export const mockProducts: Product[] = [
     rating: 4.7,
     reviewCount: 234,
     badges: [],
-    description:
-      "Ergonomic stainless steel handle designed for heavy-duty use.",
-    descriptionTh:
-      "มือจับสแตนเลสออกแบบตามหลักสรีรศาสตร์ ทนทานสำหรับการใช้งานหนัก",
+    description: "Ergonomic stainless steel handle designed for heavy-duty use.",
+    descriptionTh: "มือจับสแตนเลสออกแบบตามหลักสรีรศาสตร์ ทนทานสำหรับการใช้งานหนัก",
     features: ["Stainless Steel", "Ergonomic", "Corrosion Resistant"],
     featuresTh: ["สแตนเลส", "ตามหลักสรีรศาสตร์", "กันสนิม"],
     specs: {
@@ -935,4 +925,3 @@ export const mockActiveOrder: ActiveOrderWidget = {
   status: "Out for delivery",
   statusTh: "กำลังจัดส่ง",
 };
-

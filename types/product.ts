@@ -147,4 +147,3 @@ export interface ConfiguredProduct {
     total: number;
   };
 }
-

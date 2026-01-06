@@ -84,10 +84,7 @@ export function ProductCard({
 
   return (
     <TouchableOpacity
-      className={cn(
-        "bg-white rounded-xl overflow-hidden shadow-sm",
-        className
-      )}
+      className={cn("bg-white rounded-xl overflow-hidden shadow-sm", className)}
       onPress={handlePress}
       activeOpacity={0.9}
     >
@@ -120,30 +117,21 @@ export function ProductCard({
       {/* ข้อมูลสินค้า */}
       <View className="p-3">
         {/* ชื่อสินค้า */}
-        <Text
-          className="text-sm font-medium text-text-main-light mb-1"
-          numberOfLines={2}
-        >
+        <Text className="text-sm font-medium text-text-main-light mb-1" numberOfLines={2}>
           {product.nameTh}
         </Text>
 
         {/* Series (ถ้ามี) */}
         {product.series && (
-          <Text className="text-xs text-text-sub-light mb-1">
-            {product.series}
-          </Text>
+          <Text className="text-xs text-text-sub-light mb-1">{product.series}</Text>
         )}
 
         {/* Rating */}
-        {product.rating && (
-          <Rating rating={product.rating} size="sm" showValue className="mb-2" />
-        )}
+        {product.rating && <Rating rating={product.rating} size="sm" showValue className="mb-2" />}
 
         {/* ราคา */}
         <View className="flex-row items-center justify-between">
-          <Text className="text-base font-bold text-primary">
-            {formatPrice(product.basePrice)}
-          </Text>
+          <Text className="text-base font-bold text-primary">{formatPrice(product.basePrice)}</Text>
 
           {/* ปุ่มเพิ่มลงตะกร้า */}
           {onAddToCart && !product.isConfigurable && (
@@ -159,9 +147,7 @@ export function ProductCard({
           )}
 
           {/* ถ้าเป็นสินค้า configurable แสดงข้อความ */}
-          {product.isConfigurable && (
-            <Text className="text-xs text-text-sub-light">เริ่มต้น</Text>
-          )}
+          {product.isConfigurable && <Text className="text-xs text-text-sub-light">เริ่มต้น</Text>}
         </View>
       </View>
     </TouchableOpacity>
@@ -171,18 +157,10 @@ export function ProductCard({
 /**
  * ProductCardList - List variant (สำหรับแสดงแบบแถว)
  */
-function ProductCardList({
-  product,
-  onPress,
-  onAddToCart,
-  className,
-}: ProductCardProps) {
+function ProductCardList({ product, onPress, onAddToCart, className }: ProductCardProps) {
   return (
     <TouchableOpacity
-      className={cn(
-        "bg-white rounded-xl overflow-hidden shadow-sm flex-row",
-        className
-      )}
+      className={cn("bg-white rounded-xl overflow-hidden shadow-sm flex-row", className)}
       onPress={onPress}
       activeOpacity={0.9}
     >
@@ -208,18 +186,13 @@ function ProductCardList({
       <View className="flex-1 p-3 justify-between">
         <View>
           {/* ชื่อสินค้า */}
-          <Text
-            className="text-sm font-medium text-text-main-light"
-            numberOfLines={2}
-          >
+          <Text className="text-sm font-medium text-text-main-light" numberOfLines={2}>
             {product.nameTh}
           </Text>
 
           {/* Series */}
           {product.series && (
-            <Text className="text-xs text-text-sub-light mt-0.5">
-              {product.series}
-            </Text>
+            <Text className="text-xs text-text-sub-light mt-0.5">{product.series}</Text>
           )}
 
           {/* Rating */}
@@ -257,4 +230,3 @@ function ProductCardList({
 }
 
 export default ProductCard;
-

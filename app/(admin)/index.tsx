@@ -57,12 +57,8 @@ export default function AdminDashboard() {
       >
         {/* Header */}
         <View className="mb-6">
-          <Text className="text-2xl font-bold text-text-main-light">
-            แดชบอร์ด
-          </Text>
-          <Text className="text-sm text-text-sub-light mt-1">
-            WINDSOR Distributor Admin
-          </Text>
+          <Text className="text-2xl font-bold text-text-main-light">แดชบอร์ด</Text>
+          <Text className="text-sm text-text-sub-light mt-1">WINDSOR Distributor Admin</Text>
         </View>
 
         {/* Stats Grid */}
@@ -83,20 +79,14 @@ export default function AdminDashboard() {
                   </View>
                   <Text
                     className={`text-xs font-medium ${
-                      stat.change.startsWith("+")
-                        ? "text-green-600"
-                        : "text-red-500"
+                      stat.change.startsWith("+") ? "text-green-600" : "text-red-500"
                     }`}
                   >
                     {stat.change}
                   </Text>
                 </View>
-                <Text className="text-2xl font-bold text-text-main-light">
-                  {stat.value}
-                </Text>
-                <Text className="text-xs text-text-sub-light mt-1">
-                  {stat.label}
-                </Text>
+                <Text className="text-2xl font-bold text-text-main-light">{stat.value}</Text>
+                <Text className="text-xs text-text-sub-light mt-1">{stat.label}</Text>
               </Card>
             </View>
           ))}
@@ -105,9 +95,7 @@ export default function AdminDashboard() {
         {/* Recent Orders */}
         <Card className="mb-6">
           <View className="p-4 border-b border-border-light">
-            <Text className="text-lg font-semibold text-text-main-light">
-              คำสั่งซื้อล่าสุด
-            </Text>
+            <Text className="text-lg font-semibold text-text-main-light">คำสั่งซื้อล่าสุด</Text>
           </View>
           <View className="p-4">
             <Text className="text-sm text-text-sub-light text-center py-8">
@@ -119,9 +107,7 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <Card>
           <View className="p-4 border-b border-border-light">
-            <Text className="text-lg font-semibold text-text-main-light">
-              การดำเนินการด่วน
-            </Text>
+            <Text className="text-lg font-semibold text-text-main-light">การดำเนินการด่วน</Text>
           </View>
           <View className="p-4">
             <Text className="text-sm text-text-sub-light text-center py-8">
@@ -133,4 +119,3 @@ export default function AdminDashboard() {
     </SafeAreaView>
   );
 }
-

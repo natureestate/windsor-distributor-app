@@ -40,27 +40,16 @@ export function CategoryCard({
   if (variant === "compact") {
     return (
       <TouchableOpacity
-        className={cn(
-          "flex-row items-center bg-white rounded-lg px-3 py-2 shadow-sm",
-          className
-        )}
+        className={cn("flex-row items-center bg-white rounded-lg px-3 py-2 shadow-sm", className)}
         onPress={onPress}
         activeOpacity={0.8}
       >
         <View className="w-8 h-8 bg-primary/10 rounded-lg items-center justify-center mr-2">
-          <Ionicons
-            name={getIconName(category.icon)}
-            size={18}
-            color="#137fec"
-          />
+          <Ionicons name={getIconName(category.icon)} size={18} color="#137fec" />
         </View>
         <View className="flex-1">
-          <Text className="text-sm font-medium text-text-main-light">
-            {category.nameTh}
-          </Text>
-          <Text className="text-xs text-text-sub-light">
-            {category.productCount} รายการ
-          </Text>
+          <Text className="text-sm font-medium text-text-main-light">{category.nameTh}</Text>
+          <Text className="text-xs text-text-sub-light">{category.productCount} รายการ</Text>
         </View>
         <Ionicons name="chevron-forward" size={16} color="#94a3b8" />
       </TouchableOpacity>
@@ -70,27 +59,17 @@ export function CategoryCard({
   // Icon variant (default)
   return (
     <TouchableOpacity
-      className={cn(
-        "items-center",
-        className
-      )}
+      className={cn("items-center", className)}
       onPress={onPress}
       activeOpacity={0.8}
     >
       {/* Icon container */}
       <View className="w-14 h-14 bg-primary/10 rounded-2xl items-center justify-center mb-2">
-        <Ionicons
-          name={getIconName(category.icon)}
-          size={24}
-          color="#137fec"
-        />
+        <Ionicons name={getIconName(category.icon)} size={24} color="#137fec" />
       </View>
 
       {/* Category name */}
-      <Text
-        className="text-xs font-medium text-text-main-light text-center"
-        numberOfLines={1}
-      >
+      <Text className="text-xs font-medium text-text-main-light text-center" numberOfLines={1}>
         {category.nameTh}
       </Text>
     </TouchableOpacity>
@@ -106,11 +85,7 @@ interface CategoryRowProps {
   className?: string;
 }
 
-export function CategoryRow({
-  categories,
-  onCategoryPress,
-  className,
-}: CategoryRowProps) {
+export function CategoryRow({ categories, onCategoryPress, className }: CategoryRowProps) {
   return (
     <View className={cn("flex-row justify-between px-4", className)}>
       {categories.map((category) => (
@@ -126,4 +101,3 @@ export function CategoryRow({
 }
 
 export default CategoryCard;
-

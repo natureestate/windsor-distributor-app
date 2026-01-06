@@ -4,13 +4,7 @@
  */
 
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -85,7 +79,7 @@ export default function CheckoutScreen() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setIsProcessing(false);
-    
+
     // Navigate to success/orders
     alert("สั่งซื้อสำเร็จ!");
     router.replace("/(customer)/orders");
@@ -98,9 +92,7 @@ export default function CheckoutScreen() {
         <TouchableOpacity onPress={() => router.back()} className="mr-3">
           <Ionicons name="arrow-back" size={24} color="#0d141b" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold text-text-main-light">
-          ชำระเงิน
-        </Text>
+        <Text className="text-xl font-bold text-text-main-light">ชำระเงิน</Text>
       </View>
 
       <ScrollView
@@ -111,9 +103,7 @@ export default function CheckoutScreen() {
         {/* Shipping Address */}
         <View className="bg-white rounded-xl p-4 mb-3">
           <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-sm font-semibold text-text-main-light">
-              ที่อยู่จัดส่ง
-            </Text>
+            <Text className="text-sm font-semibold text-text-main-light">ที่อยู่จัดส่ง</Text>
             <TouchableOpacity>
               <Text className="text-sm text-primary font-medium">เปลี่ยน</Text>
             </TouchableOpacity>
@@ -130,8 +120,8 @@ export default function CheckoutScreen() {
                 {defaultAddress.addressLine2 && `, ${defaultAddress.addressLine2}`}
               </Text>
               <Text className="text-sm text-text-sub-light">
-                {defaultAddress.subDistrict}, {defaultAddress.district},{" "}
-                {defaultAddress.province} {defaultAddress.postalCode}
+                {defaultAddress.subDistrict}, {defaultAddress.district}, {defaultAddress.province}{" "}
+                {defaultAddress.postalCode}
               </Text>
             </View>
           </View>
@@ -144,7 +134,10 @@ export default function CheckoutScreen() {
           </Text>
 
           {mockCartItems.map((item) => (
-            <View key={item.id} className="flex-row items-center py-2 border-b border-border-light last:border-b-0">
+            <View
+              key={item.id}
+              className="flex-row items-center py-2 border-b border-border-light last:border-b-0"
+            >
               <Image
                 source={{ uri: item.productSnapshot.thumbnailUrl }}
                 className="w-12 h-12 rounded-lg bg-gray-100"
@@ -154,9 +147,7 @@ export default function CheckoutScreen() {
                 <Text className="text-sm text-text-main-light" numberOfLines={1}>
                   {item.productSnapshot.nameTh}
                 </Text>
-                <Text className="text-xs text-text-sub-light">
-                  x{item.quantity}
-                </Text>
+                <Text className="text-xs text-text-sub-light">x{item.quantity}</Text>
               </View>
               <Text className="text-sm font-medium text-text-main-light">
                 {formatPrice(item.totalPrice)}
@@ -167,9 +158,7 @@ export default function CheckoutScreen() {
 
         {/* Payment Methods */}
         <View className="bg-white rounded-xl p-4 mb-3">
-          <Text className="text-sm font-semibold text-text-main-light mb-3">
-            วิธีชำระเงิน
-          </Text>
+          <Text className="text-sm font-semibold text-text-main-light mb-3">วิธีชำระเงิน</Text>
 
           {paymentMethods.map((method) => (
             <TouchableOpacity
@@ -193,13 +182,9 @@ export default function CheckoutScreen() {
                 />
               </View>
               <View className="flex-1 ml-3">
-                <Text className="text-sm font-medium text-text-main-light">
-                  {method.nameTh}
-                </Text>
+                <Text className="text-sm font-medium text-text-main-light">{method.nameTh}</Text>
                 {method.description && (
-                  <Text className="text-xs text-text-sub-light">
-                    {method.description}
-                  </Text>
+                  <Text className="text-xs text-text-sub-light">{method.description}</Text>
                 )}
               </View>
               <View
@@ -219,16 +204,12 @@ export default function CheckoutScreen() {
 
         {/* Order Summary */}
         <View className="bg-white rounded-xl p-4">
-          <Text className="text-sm font-semibold text-text-main-light mb-3">
-            สรุปคำสั่งซื้อ
-          </Text>
+          <Text className="text-sm font-semibold text-text-main-light mb-3">สรุปคำสั่งซื้อ</Text>
 
           <View className="space-y-2">
             <View className="flex-row justify-between py-1">
               <Text className="text-sm text-text-sub-light">ยอดรวมสินค้า</Text>
-              <Text className="text-sm text-text-main-light">
-                {formatPrice(subtotal)}
-              </Text>
+              <Text className="text-sm text-text-main-light">{formatPrice(subtotal)}</Text>
             </View>
 
             <View className="flex-row justify-between py-1">
@@ -238,20 +219,14 @@ export default function CheckoutScreen() {
 
             <View className="flex-row justify-between py-1">
               <Text className="text-sm text-text-sub-light">ภาษี (7%)</Text>
-              <Text className="text-sm text-text-main-light">
-                {formatPrice(vat)}
-              </Text>
+              <Text className="text-sm text-text-main-light">{formatPrice(vat)}</Text>
             </View>
 
             <View className="border-t border-border-light my-2" />
 
             <View className="flex-row justify-between py-1">
-              <Text className="text-base font-bold text-text-main-light">
-                ยอดรวมทั้งสิ้น
-              </Text>
-              <Text className="text-xl font-bold text-primary">
-                {formatPrice(total)}
-              </Text>
+              <Text className="text-base font-bold text-text-main-light">ยอดรวมทั้งสิ้น</Text>
+              <Text className="text-xl font-bold text-primary">{formatPrice(total)}</Text>
             </View>
           </View>
         </View>
@@ -261,9 +236,7 @@ export default function CheckoutScreen() {
       <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 py-3 pb-8">
         <View className="flex-row items-center justify-between mb-3">
           <Text className="text-sm text-text-sub-light">ยอดชำระ</Text>
-          <Text className="text-xl font-bold text-primary">
-            {formatPrice(total)}
-          </Text>
+          <Text className="text-xl font-bold text-primary">{formatPrice(total)}</Text>
         </View>
         <Button
           variant="primary"
@@ -278,4 +251,3 @@ export default function CheckoutScreen() {
     </SafeAreaView>
   );
 }
-

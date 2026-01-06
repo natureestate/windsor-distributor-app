@@ -106,13 +106,7 @@ export function Button({
       {!isLoading && leftIcon && <View className="mr-2">{leftIcon}</View>}
 
       {/* Button text */}
-      <Text
-        className={cn(
-          "font-semibold text-center",
-          textStyles[variant],
-          textSizeStyles[size]
-        )}
-      >
+      <Text className={cn("font-semibold text-center", textStyles[variant], textSizeStyles[size])}>
         {children}
       </Text>
 
@@ -123,4 +117,3 @@ export function Button({
 }
 
 export default Button;
-

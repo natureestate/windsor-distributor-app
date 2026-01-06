@@ -41,9 +41,7 @@ export function Chip({
         // Size
         size === "sm" ? "px-2 py-1" : "px-3 py-2",
         // Selected state
-        selected
-          ? "bg-primary border-primary"
-          : "bg-white border-border-light",
+        selected ? "bg-primary border-primary" : "bg-white border-border-light",
         // Disabled state
         disabled && "opacity-50",
         // Custom className
@@ -68,11 +66,7 @@ export function Chip({
 
       {/* Remove button */}
       {onRemove && (
-        <TouchableOpacity
-          onPress={onRemove}
-          hitSlop={8}
-          className="ml-1.5"
-        >
+        <TouchableOpacity onPress={onRemove} hitSlop={8} className="ml-1.5">
           <Ionicons
             name="close-circle"
             size={size === "sm" ? 14 : 18}
@@ -93,12 +87,7 @@ interface ChipGroupProps {
 }
 
 export function ChipGroup({ children, className }: ChipGroupProps) {
-  return (
-    <View className={cn("flex-row flex-wrap gap-2", className)}>
-      {children}
-    </View>
-  );
+  return <View className={cn("flex-row flex-wrap gap-2", className)}>{children}</View>;
 }
 
 export default Chip;
-

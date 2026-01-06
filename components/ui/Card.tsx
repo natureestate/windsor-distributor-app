@@ -99,4 +99,3 @@ export function PressableCard({
 }
 
 export default Card;
-

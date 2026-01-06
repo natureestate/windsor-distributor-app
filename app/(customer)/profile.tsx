@@ -4,13 +4,7 @@
  */
 
 import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -72,17 +66,12 @@ export default function ProfileScreen() {
           <View className="flex-row items-center">
             {/* Avatar */}
             <View className="w-16 h-16 rounded-full border-2 border-white overflow-hidden">
-              <Image
-                source={{ uri: mockUser.avatarUrl }}
-                className="w-full h-full"
-              />
+              <Image source={{ uri: mockUser.avatarUrl }} className="w-full h-full" />
             </View>
 
             {/* User info */}
             <View className="flex-1 ml-4">
-              <Text className="text-lg font-bold text-white">
-                {mockUser.displayName}
-              </Text>
+              <Text className="text-lg font-bold text-white">{mockUser.displayName}</Text>
               <Text className="text-sm text-white/80">{mockUser.email}</Text>
               <Text className="text-sm text-white/80">{mockUser.phoneNumber}</Text>
             </View>
@@ -125,9 +114,7 @@ export default function ProfileScreen() {
                 <TouchableOpacity
                   key={item.id}
                   className={`flex-row items-center px-4 py-3 ${
-                    index < section.items.length - 1
-                      ? "border-b border-border-light"
-                      : ""
+                    index < section.items.length - 1 ? "border-b border-border-light" : ""
                   }`}
                   onPress={() => handleMenuPress(item.id)}
                 >
@@ -138,9 +125,7 @@ export default function ProfileScreen() {
                       color="#4c739a"
                     />
                   </View>
-                  <Text className="flex-1 ml-3 text-sm text-text-main-light">
-                    {item.label}
-                  </Text>
+                  <Text className="flex-1 ml-3 text-sm text-text-main-light">{item.label}</Text>
                   <Ionicons name="chevron-forward" size={18} color="#d1d5db" />
                 </TouchableOpacity>
               ))}
@@ -162,4 +147,3 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
-

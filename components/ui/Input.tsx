@@ -4,13 +4,7 @@
  */
 
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  TextInputProps,
-  TouchableOpacity,
-} from "react-native";
+import { View, TextInput, Text, TextInputProps, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "../../lib/utils";
 
@@ -47,11 +41,7 @@ export function Input({
   return (
     <View className={cn("w-full", containerClassName)}>
       {/* Label */}
-      {label && (
-        <Text className="text-sm font-medium text-text-main-light mb-1.5">
-          {label}
-        </Text>
-      )}
+      {label && <Text className="text-sm font-medium text-text-main-light mb-1.5">{label}</Text>}
 
       {/* Input container */}
       <View
@@ -59,11 +49,7 @@ export function Input({
           // Base styles
           "flex-row items-center bg-white rounded-lg border-2",
           // Border color based on state
-          isFocused
-            ? "border-primary"
-            : error
-            ? "border-red-500"
-            : "border-border-light",
+          isFocused ? "border-primary" : error ? "border-red-500" : "border-border-light",
           // Disabled state
           !editable && "bg-gray-100 opacity-60"
         )}
@@ -73,10 +59,7 @@ export function Input({
 
         {/* Text input */}
         <TextInput
-          className={cn(
-            "flex-1 px-3 py-3 text-base text-text-main-light",
-            inputClassName
-          )}
+          className={cn("flex-1 px-3 py-3 text-base text-text-main-light", inputClassName)}
           placeholderTextColor="#94a3b8"
           editable={editable}
           onFocus={() => setIsFocused(true)}
@@ -89,9 +72,7 @@ export function Input({
       </View>
 
       {/* Error message */}
-      {error && (
-        <Text className="text-sm text-red-500 mt-1">{error}</Text>
-      )}
+      {error && <Text className="text-sm text-red-500 mt-1">{error}</Text>}
 
       {/* Helper text */}
       {helperText && !error && (
@@ -104,20 +85,13 @@ export function Input({
 /**
  * Search Input Component
  */
-export function SearchInput({
-  value,
-  onClear,
-  containerClassName,
-  ...props
-}: SearchInputProps) {
+export function SearchInput({ value, onClear, containerClassName, ...props }: SearchInputProps) {
   const hasValue = value && value.length > 0;
 
   return (
     <Input
       containerClassName={containerClassName}
-      leftIcon={
-        <Ionicons name="search-outline" size={20} color="#94a3b8" />
-      }
+      leftIcon={<Ionicons name="search-outline" size={20} color="#94a3b8" />}
       rightIcon={
         hasValue && onClear ? (
           <TouchableOpacity onPress={onClear} hitSlop={8}>
@@ -132,4 +106,3 @@ export function SearchInput({
 }
 
 export default Input;
-

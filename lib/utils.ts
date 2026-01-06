@@ -118,10 +118,7 @@ export function getOrderStatusText(status: string): string {
 export function getOrderStatusColor(
   status: string
 ): "primary" | "success" | "warning" | "error" | "neutral" {
-  const colorMap: Record<
-    string,
-    "primary" | "success" | "warning" | "error" | "neutral"
-  > = {
+  const colorMap: Record<string, "primary" | "success" | "warning" | "error" | "neutral"> = {
     pending_payment: "warning",
     payment_confirmed: "primary",
     processing: "primary",
@@ -153,4 +150,3 @@ export function generateId(prefix: string = ""): string {
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-

@@ -68,12 +68,7 @@ const textSizeStyles: Record<BadgeSize, string> = {
   lg: "text-sm",
 };
 
-export function Badge({
-  variant = "primary",
-  size = "md",
-  children,
-  className,
-}: BadgeProps) {
+export function Badge({ variant = "primary", size = "md", children, className }: BadgeProps) {
   return (
     <View
       className={cn(
@@ -101,4 +96,3 @@ export function Badge({
 }
 
 export default Badge;
-

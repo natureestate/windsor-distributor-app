@@ -85,4 +85,3 @@ export interface GuestUser {
   cartId?: string;
   createdAt: Date;
 }
-
