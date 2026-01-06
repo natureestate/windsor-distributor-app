@@ -4,18 +4,18 @@
  */
 
 import React, { useState } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Button, Input } from "../../components/ui";
+import { Button, Input } from "../../../components/ui";
 
 // Mock Data
-import { mockCart, mockCartItems } from "../../data/mockData";
-import { formatPrice } from "../../lib/utils";
-import { CartItem } from "../../types/cart";
+import { mockCartItems } from "../../../data/mockData";
+import { formatPrice } from "../../../lib/utils";
+import { CartItem } from "../../../types/cart";
 
 export default function CartScreen() {
   const router = useRouter();
@@ -89,7 +89,7 @@ export default function CartScreen() {
           </View>
 
           {/* ปุ่มลบ */}
-          <TouchableOpacity onPress={() => removeItem(item.id)} hitSlop={8}>
+          <TouchableOpacity onPress={() => removeItem(item.id)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <Ionicons name="trash-outline" size={18} color="#ef4444" />
           </TouchableOpacity>
         </View>
@@ -132,6 +132,11 @@ export default function CartScreen() {
   if (cartItems.length === 0) {
     return (
       <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+        {/* Header */}
+        <View className="px-4 py-3 bg-white border-b border-border-light">
+          <Text className="text-xl font-bold text-text-main-light">ตะกร้าสินค้า</Text>
+        </View>
+
         <View className="flex-1 items-center justify-center px-4">
           <Ionicons name="cart-outline" size={64} color="#d1d5db" />
           <Text className="text-lg font-medium text-text-main-light mt-4">ตะกร้าว่างเปล่า</Text>
@@ -141,7 +146,7 @@ export default function CartScreen() {
           <Button
             variant="primary"
             className="mt-6"
-            onPress={() => router.push("/(customer)/catalog")}
+            onPress={() => router.push("/(customer)/(tabs)/catalog")}
           >
             เลือกซื้อสินค้า
           </Button>
@@ -230,7 +235,7 @@ export default function CartScreen() {
       </ScrollView>
 
       {/* Bottom Action */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 py-3 pb-8">
+      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 py-3 pb-24">
         <Button
           variant="primary"
           size="lg"
@@ -243,3 +248,4 @@ export default function CartScreen() {
     </SafeAreaView>
   );
 }
+

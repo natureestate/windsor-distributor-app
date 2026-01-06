@@ -4,14 +4,14 @@
  */
 
 import React from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Badge, IconButton } from "../../components/ui";
-import { ProductRow, CategoryRow } from "../../components/product";
+import { Badge, IconButton } from "../../../components/ui";
+import { ProductRow, CategoryRow } from "../../../components/product";
 
 // Mock Data
 import {
@@ -20,7 +20,7 @@ import {
   mockPromoBanners,
   mockActiveOrder,
   mockUser,
-} from "../../data/mockData";
+} from "../../../data/mockData";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -56,7 +56,7 @@ export default function HomeScreen() {
               />
               <TouchableOpacity
                 className="w-10 h-10 rounded-full overflow-hidden"
-                onPress={() => router.push("/(customer)/profile")}
+                onPress={() => router.push("/(customer)/(tabs)/profile")}
               >
                 <Image source={{ uri: mockUser.avatarUrl }} className="w-full h-full" />
               </TouchableOpacity>
@@ -66,7 +66,7 @@ export default function HomeScreen() {
           {/* Search Bar */}
           <TouchableOpacity
             className="flex-row items-center bg-white rounded-xl px-4 py-3 mt-4 border border-border-light"
-            onPress={() => router.push("/(customer)/catalog")}
+            onPress={() => router.push("/(customer)/(tabs)/catalog")}
           >
             <Ionicons name="search-outline" size={20} color="#94a3b8" />
             <Text className="flex-1 ml-3 text-text-sub-light">ค้นหาสินค้า...</Text>
@@ -97,14 +97,14 @@ export default function HomeScreen() {
         <View className="mb-6">
           <View className="flex-row items-center justify-between px-4 mb-3">
             <Text className="text-lg font-bold text-text-main-light">หมวดหมู่</Text>
-            <TouchableOpacity onPress={() => router.push("/(customer)/catalog")}>
+            <TouchableOpacity onPress={() => router.push("/(customer)/(tabs)/catalog")}>
               <Text className="text-sm text-primary font-medium">ดูทั้งหมด</Text>
             </TouchableOpacity>
           </View>
           <CategoryRow
             categories={mockCategories}
             onCategoryPress={(category) =>
-              router.push(`/(customer)/catalog?category=${category.id}`)
+              router.push(`/(customer)/(tabs)/catalog?category=${category.id}`)
             }
           />
         </View>
@@ -114,7 +114,7 @@ export default function HomeScreen() {
           <View className="px-4 mb-6">
             <TouchableOpacity
               className="bg-primary rounded-xl p-4 flex-row items-center"
-              onPress={() => router.push("/(customer)/orders")}
+              onPress={() => router.push("/(customer)/(tabs)/orders")}
             >
               <View className="w-10 h-10 bg-white/20 rounded-full items-center justify-center mr-3">
                 <Ionicons name="cube-outline" size={22} color="#ffffff" />
@@ -136,7 +136,7 @@ export default function HomeScreen() {
           products={
             featuredProducts.length > 0 ? featuredProducts : mockProductListItems.slice(0, 4)
           }
-          onSeeAll={() => router.push("/(customer)/catalog?filter=best-seller")}
+          onSeeAll={() => router.push("/(customer)/(tabs)/catalog?filter=best-seller")}
           onProductPress={(product) => router.push(`/(customer)/product/${product.id}`)}
           className="mb-6"
         />
@@ -145,7 +145,7 @@ export default function HomeScreen() {
         <ProductRow
           title="สินค้าใหม่"
           products={newProducts.length > 0 ? newProducts : mockProductListItems.slice(2, 6)}
-          onSeeAll={() => router.push("/(customer)/catalog?filter=new")}
+          onSeeAll={() => router.push("/(customer)/(tabs)/catalog?filter=new")}
           onProductPress={(product) => router.push(`/(customer)/product/${product.id}`)}
           className="mb-6"
         />
@@ -173,3 +173,4 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+

@@ -10,7 +10,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Mock Data
-import { mockUser } from "../../data/mockData";
+import { mockUser } from "../../../data/mockData";
 
 // Menu items
 const menuSections = [
@@ -47,7 +47,7 @@ export default function ProfileScreen() {
   const handleMenuPress = (id: string) => {
     switch (id) {
       case "orders":
-        router.push("/(customer)/orders");
+        router.push("/(customer)/(tabs)/orders");
         break;
       default:
         alert(`เปิดหน้า ${id}`);
@@ -55,14 +55,24 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
+    <SafeAreaView className="flex-1 bg-primary" edges={["top"]}>
       <ScrollView
-        className="flex-1"
+        className="flex-1 bg-background-light"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
       >
         {/* Header */}
-        <View className="bg-primary px-4 pt-4 pb-8">
+        <View className="bg-primary px-4 pt-2 pb-8">
+          {/* Top Bar */}
+          <View className="flex-row items-center justify-between mb-4">
+            <View className="w-10 h-10" />
+            <Text className="text-lg font-semibold text-white">บัญชีของฉัน</Text>
+            <TouchableOpacity className="w-10 h-10 bg-white/20 rounded-full items-center justify-center">
+              <Ionicons name="settings-outline" size={20} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* User Info */}
           <View className="flex-row items-center">
             {/* Avatar */}
             <View className="w-16 h-16 rounded-full border-2 border-white overflow-hidden">
@@ -85,12 +95,12 @@ export default function ProfileScreen() {
 
         {/* Quick Stats */}
         <View className="mx-4 -mt-4 bg-white rounded-xl p-4 shadow-sm flex-row">
-          <View className="flex-1 items-center">
+          <TouchableOpacity className="flex-1 items-center" onPress={() => router.push("/(customer)/(tabs)/orders")}>
             <Text className="text-xl font-bold text-primary">
               {mockUser.recentOrdersSummary?.length || 0}
             </Text>
             <Text className="text-xs text-text-sub-light mt-1">คำสั่งซื้อ</Text>
-          </View>
+          </TouchableOpacity>
           <View className="w-px bg-border-light" />
           <View className="flex-1 items-center">
             <Text className="text-xl font-bold text-primary">0</Text>
@@ -147,3 +157,4 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
+

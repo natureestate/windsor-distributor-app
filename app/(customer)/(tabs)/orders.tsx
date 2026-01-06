@@ -4,18 +4,18 @@
  */
 
 import React, { useState } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Badge, Chip, Button } from "../../components/ui";
+import { Badge, Chip, Button } from "../../../components/ui";
 
 // Mock Data
-import { mockOrders, mockOrderListItems } from "../../data/mockData";
-import { formatPrice, formatDate, getOrderStatusText, getOrderStatusColor } from "../../lib/utils";
-import { OrderStatus, Order } from "../../types/order";
+import { mockOrders } from "../../../data/mockData";
+import { formatPrice, formatDate, getOrderStatusText, getOrderStatusColor } from "../../../lib/utils";
+import { Order } from "../../../types/order";
 
 // Tab filters
 const orderTabs = [
@@ -169,3 +169,4 @@ export default function OrdersScreen() {
     </SafeAreaView>
   );
 }
+

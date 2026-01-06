@@ -10,12 +10,12 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { SearchInput, Chip } from "../../components/ui";
-import { ProductCard } from "../../components/product";
+import { SearchInput, Chip } from "../../../components/ui";
+import { ProductCard } from "../../../components/product";
 
 // Mock Data
-import { mockProductListItems, mockCategories } from "../../data/mockData";
-import { ProductCategory, ProductListItem } from "../../types/product";
+import { mockProductListItems, mockCategories } from "../../../data/mockData";
+import { ProductCategory, ProductListItem } from "../../../types/product";
 
 // Filter options
 const sortOptions = [
@@ -95,9 +95,6 @@ export default function CatalogScreen() {
       {/* Header */}
       <View className="px-4 pt-2 pb-3 bg-white border-b border-border-light">
         <View className="flex-row items-center mb-3">
-          <TouchableOpacity className="mr-3" onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#0d141b" />
-          </TouchableOpacity>
           <Text className="text-xl font-bold text-text-main-light flex-1">สินค้าทั้งหมด</Text>
           <TouchableOpacity
             className="ml-2"
@@ -180,3 +177,4 @@ export default function CatalogScreen() {
     </SafeAreaView>
   );
 }
+

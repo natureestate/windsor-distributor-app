@@ -1,16 +1,23 @@
 /**
  * Product Details Screen - หน้ารายละเอียดสินค้า
- * แสดงรูปภาพ, specs, และปุ่ม configure/add to cart
+ * แสดงรูปภาพ, specs, tabs, และปุ่ม add to cart พร้อม quantity selector
  */
 
 import React, { useState } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Button, Badge, Rating, Chip } from "../../../components/ui";
+import { Button, Badge, Rating } from "../../../components/ui";
 import { ProductRow } from "../../../components/product";
 
 // Mock Data
@@ -18,6 +25,17 @@ import { mockProducts, mockProductListItems } from "../../../data/mockData";
 import { formatPrice } from "../../../lib/utils";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+// Tab types
+type TabType = "description" | "specifications" | "installation";
+
+// Feature icons data
+const featureIcons = [
+  { id: "noise", icon: "volume-mute-outline", label: "Noise Reduction" },
+  { id: "uv", icon: "sunny-outline", label: "UV Protection" },
+  { id: "security", icon: "shield-checkmark-outline", label: "High Security" },
+  { id: "waterproof", icon: "water-outline", label: "Waterproof" },
+];
 
 export default function ProductDetailScreen() {
   const router = useRouter();
@@ -29,24 +47,162 @@ export default function ProductDetailScreen() {
   // State
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(product.constraints?.colors[0]?.id || "");
-  const [selectedGlass, setSelectedGlass] = useState(
-    product.constraints?.glassTypes?.[0]?.id || ""
-  );
   const [isFavorite, setIsFavorite] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("description");
+  const [quantity, setQuantity] = useState(1);
 
   // Similar products (กรองตาม category)
   const similarProducts = mockProductListItems
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
+  // Handle quantity change
+  const incrementQuantity = () => setQuantity((prev) => prev + 1);
+  const decrementQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
   // Handle add to cart
   const handleAddToCart = () => {
     if (product.isConfigurable) {
-      // ไปหน้า configurator
       router.push(`/(customer)/product/${id}/configure`);
     } else {
-      // เพิ่มลงตะกร้าเลย
-      alert("เพิ่มลงตะกร้าแล้ว!");
+      alert(`เพิ่ม ${quantity} ชิ้นลงตะกร้าแล้ว!`);
+    }
+  };
+
+  // Render tab content
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "description":
+        return (
+          <View>
+            {/* Description Text */}
+            <Text className="text-sm text-text-sub-light leading-6 mb-4">
+              {product.descriptionTh || product.description}
+            </Text>
+            <Text className="text-sm text-text-sub-light leading-6 mb-6">
+              Perfect for modern homes, the smooth gliding mechanism ensures effortless operation
+              while the multi-point locking system provides enhanced security for your peace of
+              mind.
+            </Text>
+
+            {/* Feature Icons Grid */}
+            <View className="flex-row flex-wrap mb-6">
+              {featureIcons.map((feature) => (
+                <View key={feature.id} className="w-1/2 flex-row items-center py-3 pr-2">
+                  <View className="w-10 h-10 bg-background-light rounded-full items-center justify-center mr-3">
+                    <Ionicons
+                      name={feature.icon as keyof typeof Ionicons.glyphMap}
+                      size={20}
+                      color="#4c739a"
+                    />
+                  </View>
+                  <Text className="text-sm text-text-main-light">{feature.label}</Text>
+                </View>
+              ))}
+            </View>
+
+            {/* Quick Specs Table */}
+            <View className="bg-background-light rounded-xl overflow-hidden">
+              <View className="flex-row justify-between px-4 py-3 border-b border-border-light">
+                <Text className="text-sm text-text-sub-light">Material</Text>
+                <Text className="text-sm font-medium text-text-main-light">Premium uPVC</Text>
+              </View>
+              <View className="flex-row justify-between px-4 py-3 border-b border-border-light">
+                <Text className="text-sm text-text-sub-light">Warranty</Text>
+                <Text className="text-sm font-medium text-text-main-light">10 Years Limited</Text>
+              </View>
+              <View className="flex-row justify-between px-4 py-3">
+                <Text className="text-sm text-text-sub-light">Glass Type</Text>
+                <Text className="text-sm font-medium text-text-main-light">
+                  Double Glazed Tempered
+                </Text>
+              </View>
+            </View>
+          </View>
+        );
+
+      case "specifications":
+        return (
+          <View className="bg-background-light rounded-xl overflow-hidden">
+            {Object.entries(product.specs).map(([key, value], index, arr) => (
+              <View
+                key={key}
+                className={`flex-row justify-between px-4 py-3 ${
+                  index < arr.length - 1 ? "border-b border-border-light" : ""
+                }`}
+              >
+                <Text className="text-sm text-text-sub-light capitalize">
+                  {key.replace(/([A-Z])/g, " $1").trim()}
+                </Text>
+                <Text className="text-sm font-medium text-text-main-light">{value}</Text>
+              </View>
+            ))}
+            {/* Additional specs */}
+            <View className="flex-row justify-between px-4 py-3 border-t border-border-light">
+              <Text className="text-sm text-text-sub-light">Frame Material</Text>
+              <Text className="text-sm font-medium text-text-main-light">uPVC</Text>
+            </View>
+            <View className="flex-row justify-between px-4 py-3 border-t border-border-light">
+              <Text className="text-sm text-text-sub-light">Glass Thickness</Text>
+              <Text className="text-sm font-medium text-text-main-light">5mm + 12mm + 5mm</Text>
+            </View>
+            <View className="flex-row justify-between px-4 py-3 border-t border-border-light">
+              <Text className="text-sm text-text-sub-light">Max Width</Text>
+              <Text className="text-sm font-medium text-text-main-light">3000mm</Text>
+            </View>
+            <View className="flex-row justify-between px-4 py-3 border-t border-border-light">
+              <Text className="text-sm text-text-sub-light">Max Height</Text>
+              <Text className="text-sm font-medium text-text-main-light">2400mm</Text>
+            </View>
+          </View>
+        );
+
+      case "installation":
+        return (
+          <View>
+            <Text className="text-sm text-text-sub-light leading-6 mb-4">
+              Professional installation is recommended for optimal performance and warranty
+              coverage.
+            </Text>
+            <View className="bg-background-light rounded-xl p-4 mb-4">
+              <View className="flex-row items-center mb-3">
+                <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center mr-3">
+                  <Text className="text-primary font-bold">1</Text>
+                </View>
+                <Text className="flex-1 text-sm text-text-main-light">
+                  Site survey and measurement
+                </Text>
+              </View>
+              <View className="flex-row items-center mb-3">
+                <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center mr-3">
+                  <Text className="text-primary font-bold">2</Text>
+                </View>
+                <Text className="flex-1 text-sm text-text-main-light">
+                  Frame installation and leveling
+                </Text>
+              </View>
+              <View className="flex-row items-center mb-3">
+                <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center mr-3">
+                  <Text className="text-primary font-bold">3</Text>
+                </View>
+                <Text className="flex-1 text-sm text-text-main-light">
+                  Glass panel fitting and sealing
+                </Text>
+              </View>
+              <View className="flex-row items-center">
+                <View className="w-8 h-8 bg-primary/10 rounded-full items-center justify-center mr-3">
+                  <Text className="text-primary font-bold">4</Text>
+                </View>
+                <Text className="flex-1 text-sm text-text-main-light">
+                  Final inspection and handover
+                </Text>
+              </View>
+            </View>
+            <Text className="text-xs text-text-sub-light">
+              * Installation time: 1-2 days depending on size and complexity
+            </Text>
+          </View>
+        );
     }
   };
 
@@ -55,7 +211,7 @@ export default function ProductDetailScreen() {
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         {/* Header */}
         <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-4 py-2">
@@ -98,7 +254,7 @@ export default function ProductDetailScreen() {
               <Image
                 key={index}
                 source={{ uri: image }}
-                style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH }}
+                style={{ width: SCREEN_WIDTH, height: SCREEN_WIDTH * 0.8 }}
                 resizeMode="cover"
               />
             ))}
@@ -143,9 +299,7 @@ export default function ProductDetailScreen() {
               <Text className="text-xs text-text-sub-light mt-0.5">SKU: {product.sku}</Text>
             </View>
             <View className="items-end">
-              <Text className="text-2xl font-bold text-primary">
-                {formatPrice(product.basePrice)}
-              </Text>
+              <Text className="text-2xl font-bold text-primary">{formatPrice(product.basePrice)}</Text>
               {product.isConfigurable && (
                 <Text className="text-xs text-text-sub-light">เริ่มต้น</Text>
               )}
@@ -154,35 +308,12 @@ export default function ProductDetailScreen() {
 
           {/* Rating */}
           {product.rating && (
-            <Rating
-              rating={product.rating}
-              reviewCount={product.reviewCount}
-              showCount
-              className="mb-4"
-            />
+            <Rating rating={product.rating} reviewCount={product.reviewCount} showCount className="mb-4" />
           )}
-
-          {/* Description */}
-          <Text className="text-sm text-text-sub-light leading-5 mb-4">
-            {product.descriptionTh || product.description}
-          </Text>
-
-          {/* Features */}
-          <View className="flex-row flex-wrap gap-2 mb-6">
-            {(product.featuresTh || product.features).map((feature, index) => (
-              <View
-                key={index}
-                className="flex-row items-center bg-primary/10 px-3 py-1.5 rounded-full"
-              >
-                <Ionicons name="checkmark-circle" size={14} color="#137fec" />
-                <Text className="text-xs text-primary ml-1 font-medium">{feature}</Text>
-              </View>
-            ))}
-          </View>
 
           {/* Color Options (ถ้ามี) */}
           {product.constraints?.colors && (
-            <View className="mb-6">
+            <View className="mb-4">
               <Text className="text-sm font-semibold text-text-main-light mb-3">สี</Text>
               <View className="flex-row flex-wrap gap-2">
                 {product.constraints.colors.map((color) => (
@@ -193,36 +324,41 @@ export default function ProductDetailScreen() {
                     }`}
                     onPress={() => setSelectedColor(color.id)}
                   >
-                    <View
-                      className="w-7 h-7 rounded-full"
-                      style={{ backgroundColor: color.hexCode }}
-                    />
+                    <View className="w-7 h-7 rounded-full" style={{ backgroundColor: color.hexCode }} />
                   </TouchableOpacity>
                 ))}
               </View>
             </View>
           )}
 
-          {/* Specifications */}
-          <View className="mb-6">
-            <Text className="text-sm font-semibold text-text-main-light mb-3">รายละเอียด</Text>
-            <View className="bg-background-light rounded-xl p-4">
-              {Object.entries(product.specs).map(([key, value]) => (
-                <View
-                  key={key}
-                  className="flex-row justify-between py-2 border-b border-border-light last:border-b-0"
+          {/* Tab Navigation */}
+          <View className="flex-row border-b border-border-light mb-4">
+            {(["description", "specifications", "installation"] as TabType[]).map((tab) => (
+              <TouchableOpacity
+                key={tab}
+                className={`flex-1 py-3 ${activeTab === tab ? "border-b-2 border-primary" : ""}`}
+                onPress={() => setActiveTab(tab)}
+              >
+                <Text
+                  className={`text-sm text-center font-medium ${
+                    activeTab === tab ? "text-primary" : "text-text-sub-light"
+                  }`}
                 >
-                  <Text className="text-sm text-text-sub-light capitalize">
-                    {key.replace(/([A-Z])/g, " $1").trim()}
-                  </Text>
-                  <Text className="text-sm font-medium text-text-main-light">{value}</Text>
-                </View>
-              ))}
-            </View>
+                  {tab === "description"
+                    ? "Description"
+                    : tab === "specifications"
+                      ? "Specifications"
+                      : "Installation"}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
 
+          {/* Tab Content */}
+          <View className="mb-6">{renderTabContent()}</View>
+
           {/* Stock Status */}
-          <View className="flex-row items-center mb-6">
+          <View className="flex-row items-center mb-4">
             <View
               className={`w-2 h-2 rounded-full mr-2 ${
                 product.stockStatus === "in-stock"
@@ -253,24 +389,53 @@ export default function ProductDetailScreen() {
         )}
       </ScrollView>
 
-      {/* Bottom Action Bar */}
+      {/* Bottom Action Bar with Quantity Selector */}
       <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-border-light px-4 py-3 pb-8">
-        <View className="flex-row gap-3">
-          {/* Chat button */}
-          <TouchableOpacity className="w-12 h-12 bg-background-light rounded-xl items-center justify-center">
-            <Ionicons name="chatbubble-outline" size={22} color="#0d141b" />
-          </TouchableOpacity>
+        {/* Quantity Row */}
+        <View className="flex-row items-center justify-between mb-3">
+          <Text className="text-sm font-medium text-text-main-light">จำนวน</Text>
+          <View className="flex-row items-center bg-background-light rounded-xl">
+            <TouchableOpacity
+              className="w-10 h-10 items-center justify-center"
+              onPress={decrementQuantity}
+            >
+              <Ionicons name="remove" size={18} color={quantity > 1 ? "#0d141b" : "#d1d5db"} />
+            </TouchableOpacity>
+            <Text className="w-12 text-center text-base font-semibold text-text-main-light">
+              {quantity}
+            </Text>
+            <TouchableOpacity
+              className="w-10 h-10 items-center justify-center"
+              onPress={incrementQuantity}
+            >
+              <Ionicons name="add" size={18} color="#0d141b" />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-          {/* Add to cart / Configure button */}
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            onPress={handleAddToCart}
-            className="flex-1"
+        {/* Action Buttons Row */}
+        <View className="flex-row items-center gap-3">
+          {/* Configure Button (ถ้าสินค้า configurable) */}
+          {product.isConfigurable && (
+            <TouchableOpacity
+              className="flex-1 h-12 bg-background-light rounded-xl items-center justify-center flex-row"
+              onPress={() => router.push(`/(customer)/product/${id}/configure`)}
+            >
+              <Ionicons name="options-outline" size={20} color="#0d141b" />
+              <Text className="text-text-main-light font-semibold ml-2">กำหนดขนาด</Text>
+            </TouchableOpacity>
+          )}
+
+          {/* Add to Cart Button */}
+          <TouchableOpacity
+            className="flex-1 h-12 bg-primary rounded-xl items-center justify-center flex-row"
+            onPress={() => {
+              alert(`เพิ่ม ${quantity} ชิ้นลงตะกร้าแล้ว!`);
+            }}
           >
-            {product.isConfigurable ? "กำหนดขนาด" : "เพิ่มลงตะกร้า"}
-          </Button>
+            <Ionicons name="cart-outline" size={20} color="#ffffff" />
+            <Text className="text-white font-semibold ml-2">เพิ่มลงตะกร้า</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
