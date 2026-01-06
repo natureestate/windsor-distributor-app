@@ -1,12 +1,14 @@
 /**
  * Chip Component สำหรับ WINDSOR Distributor App
  * ใช้สำหรับ filter chips, tags, และ selection
+ * รองรับ Dark Mode
  */
 
 import React from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "../../lib/utils";
+import { useThemeColors } from "../../contexts";
 
 interface ChipProps {
   label: string;
@@ -30,8 +32,14 @@ export function Chip({
   className,
 }: ChipProps) {
   const isInteractive = !!onPress && !disabled;
+  const { cardBg, textMain, borderColor, isDark } = useThemeColors();
 
   const Container = isInteractive ? TouchableOpacity : View;
+
+  // สีสำหรับ unselected state ตาม theme
+  const unselectedBg = isDark ? "bg-surface-dark" : "bg-white";
+  const unselectedBorder = isDark ? "border-border-dark" : "border-border-light";
+  const unselectedText = isDark ? "text-text-main-dark" : "text-text-main-light";
 
   return (
     <Container
@@ -41,7 +49,7 @@ export function Chip({
         // Size
         size === "sm" ? "px-2 py-1" : "px-3 py-2",
         // Selected state
-        selected ? "bg-primary border-primary" : "bg-white border-border-light",
+        selected ? "bg-primary border-primary" : `${unselectedBg} ${unselectedBorder}`,
         // Disabled state
         disabled && "opacity-50",
         // Custom className
@@ -58,7 +66,7 @@ export function Chip({
         className={cn(
           "font-medium",
           size === "sm" ? "text-xs" : "text-sm",
-          selected ? "text-white" : "text-text-main-light"
+          selected ? "text-white" : unselectedText
         )}
       >
         {label}
@@ -70,7 +78,7 @@ export function Chip({
           <Ionicons
             name="close-circle"
             size={size === "sm" ? 14 : 18}
-            color={selected ? "#ffffff" : "#94a3b8"}
+            color={selected ? "#ffffff" : (isDark ? "#64748b" : "#94a3b8")}
           />
         </TouchableOpacity>
       )}

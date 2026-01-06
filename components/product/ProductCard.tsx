@@ -1,6 +1,7 @@
 /**
  * ProductCard Component สำหรับ WINDSOR Distributor App
  * แสดงสินค้าในรูปแบบ card ตาม design reference
+ * รองรับ Dark Mode
  */
 
 import React from "react";
@@ -10,6 +11,7 @@ import { useRouter } from "expo-router";
 import { ProductListItem, ProductBadge } from "../../types/product";
 import { Badge, Rating } from "../ui";
 import { cn, formatPrice } from "../../lib/utils";
+import { useThemeColors } from "../../contexts";
 
 interface ProductCardProps {
   product: ProductListItem;
@@ -62,6 +64,7 @@ export function ProductCard({
   className,
 }: ProductCardProps) {
   const router = useRouter();
+  const { cardBg, textMain, textSub, isDark } = useThemeColors();
 
   const handlePress = () => {
     if (onPress) {
@@ -84,7 +87,7 @@ export function ProductCard({
 
   return (
     <TouchableOpacity
-      className={cn("bg-white rounded-xl overflow-hidden shadow-sm", className)}
+      className={cn(`${cardBg} rounded-xl overflow-hidden shadow-sm`, className)}
       onPress={handlePress}
       activeOpacity={0.9}
     >
@@ -107,23 +110,23 @@ export function ProductCard({
 
         {/* Favorite button */}
         <TouchableOpacity
-          className="absolute top-2 right-2 w-8 h-8 bg-white/80 rounded-full items-center justify-center"
+          className={`absolute top-2 right-2 w-8 h-8 ${isDark ? "bg-surface-dark/80" : "bg-white/80"} rounded-full items-center justify-center`}
           hitSlop={8}
         >
-          <Ionicons name="heart-outline" size={18} color="#0d141b" />
+          <Ionicons name="heart-outline" size={18} color={isDark ? "#e2e8f0" : "#0d141b"} />
         </TouchableOpacity>
       </View>
 
       {/* ข้อมูลสินค้า */}
       <View className="p-3">
         {/* ชื่อสินค้า */}
-        <Text className="text-sm font-medium text-text-main-light mb-1" numberOfLines={2}>
+        <Text className={`text-sm font-medium ${textMain} mb-1`} numberOfLines={2}>
           {product.nameTh}
         </Text>
 
         {/* Series (ถ้ามี) */}
         {product.series && (
-          <Text className="text-xs text-text-sub-light mb-1">{product.series}</Text>
+          <Text className={`text-xs ${textSub} mb-1`}>{product.series}</Text>
         )}
 
         {/* Rating */}
@@ -147,7 +150,7 @@ export function ProductCard({
           )}
 
           {/* ถ้าเป็นสินค้า configurable แสดงข้อความ */}
-          {product.isConfigurable && <Text className="text-xs text-text-sub-light">เริ่มต้น</Text>}
+          {product.isConfigurable && <Text className={`text-xs ${textSub}`}>เริ่มต้น</Text>}
         </View>
       </View>
     </TouchableOpacity>
@@ -158,9 +161,11 @@ export function ProductCard({
  * ProductCardList - List variant (สำหรับแสดงแบบแถว)
  */
 function ProductCardList({ product, onPress, onAddToCart, className }: ProductCardProps) {
+  const { cardBg, textMain, textSub } = useThemeColors();
+
   return (
     <TouchableOpacity
-      className={cn("bg-white rounded-xl overflow-hidden shadow-sm flex-row", className)}
+      className={cn(`${cardBg} rounded-xl overflow-hidden shadow-sm flex-row`, className)}
       onPress={onPress}
       activeOpacity={0.9}
     >
@@ -186,13 +191,13 @@ function ProductCardList({ product, onPress, onAddToCart, className }: ProductCa
       <View className="flex-1 p-3 justify-between">
         <View>
           {/* ชื่อสินค้า */}
-          <Text className="text-sm font-medium text-text-main-light" numberOfLines={2}>
+          <Text className={`text-sm font-medium ${textMain}`} numberOfLines={2}>
             {product.nameTh}
           </Text>
 
           {/* Series */}
           {product.series && (
-            <Text className="text-xs text-text-sub-light mt-0.5">{product.series}</Text>
+            <Text className={`text-xs ${textSub} mt-0.5`}>{product.series}</Text>
           )}
 
           {/* Rating */}
@@ -208,7 +213,7 @@ function ProductCardList({ product, onPress, onAddToCart, className }: ProductCa
               {formatPrice(product.basePrice)}
             </Text>
             {product.isConfigurable && (
-              <Text className="text-xs text-text-sub-light">เริ่มต้น</Text>
+              <Text className={`text-xs ${textSub}`}>เริ่มต้น</Text>
             )}
           </View>
 

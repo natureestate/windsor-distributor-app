@@ -1,12 +1,14 @@
 /**
  * Input Component สำหรับ WINDSOR Distributor App
  * รองรับ text input, search, และ textarea
+ * รองรับ Dark Mode
  */
 
 import React, { useState } from "react";
 import { View, TextInput, Text, TextInputProps, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "../../lib/utils";
+import { useThemeColors } from "../../contexts";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -37,21 +39,22 @@ export function Input({
   ...props
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
+  const { cardBg, textMain, textSub, borderColor, isDark, raw } = useThemeColors();
 
   return (
     <View className={cn("w-full", containerClassName)}>
       {/* Label */}
-      {label && <Text className="text-sm font-medium text-text-main-light mb-1.5">{label}</Text>}
+      {label && <Text className={`text-sm font-medium ${textMain} mb-1.5`}>{label}</Text>}
 
       {/* Input container */}
       <View
         className={cn(
           // Base styles
-          "flex-row items-center bg-white rounded-lg border-2",
+          `flex-row items-center ${cardBg} rounded-lg border-2`,
           // Border color based on state
-          isFocused ? "border-primary" : error ? "border-red-500" : "border-border-light",
+          isFocused ? "border-primary" : error ? "border-red-500" : borderColor,
           // Disabled state
-          !editable && "bg-gray-100 opacity-60"
+          !editable && "opacity-60"
         )}
       >
         {/* Left icon */}
@@ -59,11 +62,12 @@ export function Input({
 
         {/* Text input */}
         <TextInput
-          className={cn("flex-1 px-3 py-3 text-base text-text-main-light", inputClassName)}
-          placeholderTextColor="#94a3b8"
+          className={cn(`flex-1 px-3 py-3 text-base ${textMain}`, inputClassName)}
+          placeholderTextColor={isDark ? "#64748b" : "#94a3b8"}
           editable={editable}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          style={{ color: raw.textMain }}
           {...props}
         />
 
@@ -76,7 +80,7 @@ export function Input({
 
       {/* Helper text */}
       {helperText && !error && (
-        <Text className="text-sm text-text-sub-light mt-1">{helperText}</Text>
+        <Text className={`text-sm ${textSub} mt-1`}>{helperText}</Text>
       )}
     </View>
   );
@@ -87,15 +91,17 @@ export function Input({
  */
 export function SearchInput({ value, onClear, containerClassName, ...props }: SearchInputProps) {
   const hasValue = value && value.length > 0;
+  const { isDark } = useThemeColors();
+  const iconColor = isDark ? "#64748b" : "#94a3b8";
 
   return (
     <Input
       containerClassName={containerClassName}
-      leftIcon={<Ionicons name="search-outline" size={20} color="#94a3b8" />}
+      leftIcon={<Ionicons name="search-outline" size={20} color={iconColor} />}
       rightIcon={
         hasValue && onClear ? (
           <TouchableOpacity onPress={onClear} hitSlop={8}>
-            <Ionicons name="close-circle" size={20} color="#94a3b8" />
+            <Ionicons name="close-circle" size={20} color={iconColor} />
           </TouchableOpacity>
         ) : undefined
       }

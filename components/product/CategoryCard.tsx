@@ -1,6 +1,7 @@
 /**
  * CategoryCard Component สำหรับ WINDSOR Distributor App
  * แสดงหมวดหมู่สินค้า
+ * รองรับ Dark Mode
  */
 
 import React from "react";
@@ -8,6 +9,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { cn } from "../../lib/utils";
 import { Category } from "../../data/mockData";
+import { useThemeColors } from "../../contexts";
 
 interface CategoryCardProps {
   category: Category;
@@ -37,10 +39,12 @@ export function CategoryCard({
   variant = "icon",
   className,
 }: CategoryCardProps) {
+  const { cardBg, textMain, textSub, isDark } = useThemeColors();
+
   if (variant === "compact") {
     return (
       <TouchableOpacity
-        className={cn("flex-row items-center bg-white rounded-lg px-3 py-2 shadow-sm", className)}
+        className={cn(`flex-row items-center ${cardBg} rounded-lg px-3 py-2 shadow-sm`, className)}
         onPress={onPress}
         activeOpacity={0.8}
       >
@@ -48,10 +52,10 @@ export function CategoryCard({
           <Ionicons name={getIconName(category.icon)} size={18} color="#137fec" />
         </View>
         <View className="flex-1">
-          <Text className="text-sm font-medium text-text-main-light">{category.nameTh}</Text>
-          <Text className="text-xs text-text-sub-light">{category.productCount} รายการ</Text>
+          <Text className={`text-sm font-medium ${textMain}`}>{category.nameTh}</Text>
+          <Text className={`text-xs ${textSub}`}>{category.productCount} รายการ</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#94a3b8" />
+        <Ionicons name="chevron-forward" size={16} color={isDark ? "#64748b" : "#94a3b8"} />
       </TouchableOpacity>
     );
   }
@@ -69,7 +73,7 @@ export function CategoryCard({
       </View>
 
       {/* Category name */}
-      <Text className="text-xs font-medium text-text-main-light text-center" numberOfLines={1}>
+      <Text className={`text-xs font-medium ${textMain} text-center`} numberOfLines={1}>
         {category.nameTh}
       </Text>
     </TouchableOpacity>

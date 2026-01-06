@@ -1,6 +1,7 @@
 /**
  * ProductGrid Component สำหรับ WINDSOR Distributor App
  * แสดงรายการสินค้าในรูปแบบ grid
+ * รองรับ Dark Mode
  */
 
 import React from "react";
@@ -8,6 +9,7 @@ import { View, FlatList, Text, ActivityIndicator } from "react-native";
 import { ProductListItem } from "../../types/product";
 import { ProductCard } from "./ProductCard";
 import { cn } from "../../lib/utils";
+import { useThemeColors } from "../../contexts";
 
 interface ProductGridProps {
   products: ProductListItem[];
@@ -112,12 +114,14 @@ export function ProductRow({
   onAddToCart,
   className,
 }: ProductRowProps) {
+  const { textMain } = useThemeColors();
+
   return (
     <View className={cn(className)}>
       {/* Header */}
       {title && (
         <View className="flex-row items-center justify-between px-4 mb-3">
-          <Text className="text-lg font-bold text-text-main-light">{title}</Text>
+          <Text className={`text-lg font-bold ${textMain}`}>{title}</Text>
           {onSeeAll && (
             <Text className="text-sm text-primary font-medium" onPress={onSeeAll}>
               ดูทั้งหมด
