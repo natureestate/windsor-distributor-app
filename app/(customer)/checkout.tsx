@@ -65,15 +65,35 @@ const paymentMethods: {
 
 // ธนาคารสำหรับโอนเงิน
 const bankOptions = [
-  { id: "kbank", name: "ธนาคารกสิกรไทย", accountNo: "123-4-56789-0", accountName: "บจก. วินด์เซอร์" },
-  { id: "scb", name: "ธนาคารไทยพาณิชย์", accountNo: "234-5-67890-1", accountName: "บจก. วินด์เซอร์" },
+  {
+    id: "kbank",
+    name: "ธนาคารกสิกรไทย",
+    accountNo: "123-4-56789-0",
+    accountName: "บจก. วินด์เซอร์",
+  },
+  {
+    id: "scb",
+    name: "ธนาคารไทยพาณิชย์",
+    accountNo: "234-5-67890-1",
+    accountName: "บจก. วินด์เซอร์",
+  },
   { id: "bbl", name: "ธนาคารกรุงเทพ", accountNo: "345-6-78901-2", accountName: "บจก. วินด์เซอร์" },
 ];
 
 export default function CheckoutScreen() {
   const router = useRouter();
-  const { bgColor, cardBg, textMain, textSub, borderColor, iconMain, iconSub, surfaceBg, isDark, raw } =
-    useThemeColors();
+  const {
+    bgColor,
+    cardBg,
+    textMain,
+    textSub,
+    borderColor,
+    iconMain,
+    iconSub,
+    surfaceBg,
+    isDark,
+    raw,
+  } = useThemeColors();
 
   // State
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>("credit_card");
@@ -210,8 +230,8 @@ export default function CheckoutScreen() {
                 {selectedAddress.addressLine2 && `, ${selectedAddress.addressLine2}`}
               </Text>
               <Text className={`text-sm ${textSub}`}>
-                {selectedAddress.subDistrict}, {selectedAddress.district}, {selectedAddress.province}{" "}
-                {selectedAddress.postalCode}
+                {selectedAddress.subDistrict}, {selectedAddress.district},{" "}
+                {selectedAddress.province} {selectedAddress.postalCode}
               </Text>
             </View>
           </View>
@@ -239,7 +259,9 @@ export default function CheckoutScreen() {
                 </Text>
                 <Text className="text-xs text-primary">x{item.quantity}</Text>
               </View>
-              <Text className={`text-sm font-medium ${textMain}`}>{formatPrice(item.totalPrice)}</Text>
+              <Text className={`text-sm font-medium ${textMain}`}>
+                {formatPrice(item.totalPrice)}
+              </Text>
             </View>
           ))}
         </View>
@@ -255,8 +277,8 @@ export default function CheckoutScreen() {
                 selectedPayment === method.id
                   ? "border-primary bg-primary/5"
                   : isDark
-                  ? "border-border-dark"
-                  : "border-border-light"
+                    ? "border-border-dark"
+                    : "border-border-light"
               }`}
               onPress={() => handlePaymentSelect(method.id)}
             >
@@ -265,8 +287,8 @@ export default function CheckoutScreen() {
                   selectedPayment === method.id
                     ? "bg-primary"
                     : isDark
-                    ? "bg-background-dark"
-                    : "bg-background-light"
+                      ? "bg-background-dark"
+                      : "bg-background-light"
                 }`}
               >
                 <Ionicons
@@ -277,25 +299,31 @@ export default function CheckoutScreen() {
               </View>
               <View className="flex-1 ml-3">
                 <Text className={`text-sm font-medium ${textMain}`}>{method.nameTh}</Text>
-                {method.description && <Text className={`text-xs ${textSub}`}>{method.description}</Text>}
+                {method.description && (
+                  <Text className={`text-xs ${textSub}`}>{method.description}</Text>
+                )}
               </View>
               <View
                 className={`w-5 h-5 rounded-full border-2 items-center justify-center ${
                   selectedPayment === method.id
                     ? "border-primary bg-primary"
                     : isDark
-                    ? "border-border-dark"
-                    : "border-border-light"
+                      ? "border-border-dark"
+                      : "border-border-light"
                 }`}
               >
-                {selectedPayment === method.id && <Ionicons name="checkmark" size={12} color="#ffffff" />}
+                {selectedPayment === method.id && (
+                  <Ionicons name="checkmark" size={12} color="#ffffff" />
+                )}
               </View>
             </TouchableOpacity>
           ))}
 
           {/* แสดงข้อมูลบัตรที่กรอกแล้ว */}
           {selectedPayment === "credit_card" && cardNumber && (
-            <View className={`mt-2 p-3 rounded-lg ${isDark ? "bg-background-dark" : "bg-background-light"}`}>
+            <View
+              className={`mt-2 p-3 rounded-lg ${isDark ? "bg-background-dark" : "bg-background-light"}`}
+            >
               <Text className={`text-xs ${textSub}`}>บัตรที่เลือก</Text>
               <Text className={`text-sm font-medium ${textMain}`}>
                 **** **** **** {cardNumber.slice(-4)}
@@ -305,7 +333,9 @@ export default function CheckoutScreen() {
 
           {/* แสดงธนาคารที่เลือก */}
           {selectedPayment === "bank_transfer" && (
-            <View className={`mt-2 p-3 rounded-lg ${isDark ? "bg-background-dark" : "bg-background-light"}`}>
+            <View
+              className={`mt-2 p-3 rounded-lg ${isDark ? "bg-background-dark" : "bg-background-light"}`}
+            >
               <Text className={`text-xs ${textSub}`}>โอนเงินไปที่</Text>
               <Text className={`text-sm font-medium ${textMain}`}>
                 {bankOptions.find((b) => b.id === selectedBank)?.name}
@@ -355,7 +385,13 @@ export default function CheckoutScreen() {
           <Text className={`text-sm ${textSub}`}>ยอดชำระ</Text>
           <Text className="text-xl font-bold text-primary">{formatPrice(total)}</Text>
         </View>
-        <Button variant="primary" size="lg" fullWidth isLoading={isProcessing} onPress={handlePlaceOrder}>
+        <Button
+          variant="primary"
+          size="lg"
+          fullWidth
+          isLoading={isProcessing}
+          onPress={handlePlaceOrder}
+        >
           ยืนยันการสั่งซื้อ
         </Button>
       </View>
@@ -373,7 +409,9 @@ export default function CheckoutScreen() {
         >
           <Pressable className={`${surfaceBg} rounded-t-3xl`} onPress={(e) => e.stopPropagation()}>
             {/* Header */}
-            <View className={`flex-row items-center justify-between px-4 py-4 border-b ${borderColor}`}>
+            <View
+              className={`flex-row items-center justify-between px-4 py-4 border-b ${borderColor}`}
+            >
               <Text className={`text-lg font-bold ${textMain}`}>เลือกที่อยู่จัดส่ง</Text>
               <TouchableOpacity onPress={() => setAddressModalVisible(false)}>
                 <Ionicons name="close" size={24} color={iconMain} />
@@ -389,8 +427,8 @@ export default function CheckoutScreen() {
                     selectedAddressIndex === index
                       ? "border-primary bg-primary/5"
                       : isDark
-                      ? "border-border-dark"
-                      : "border-border-light"
+                        ? "border-border-dark"
+                        : "border-border-light"
                   }`}
                   onPress={() => {
                     setSelectedAddressIndex(index);
@@ -420,8 +458,8 @@ export default function CheckoutScreen() {
                         selectedAddressIndex === index
                           ? "border-primary bg-primary"
                           : isDark
-                          ? "border-border-dark"
-                          : "border-border-light"
+                            ? "border-border-dark"
+                            : "border-border-light"
                       }`}
                     >
                       {selectedAddressIndex === index && (
@@ -465,7 +503,9 @@ export default function CheckoutScreen() {
         >
           <Pressable className={`${surfaceBg} rounded-t-3xl`} onPress={(e) => e.stopPropagation()}>
             {/* Header */}
-            <View className={`flex-row items-center justify-between px-4 py-4 border-b ${borderColor}`}>
+            <View
+              className={`flex-row items-center justify-between px-4 py-4 border-b ${borderColor}`}
+            >
               <Text className={`text-lg font-bold ${textMain}`}>
                 {selectedPayment === "credit_card" && "กรอกข้อมูลบัตร"}
                 {selectedPayment === "promptpay" && "ชำระผ่านพร้อมเพย์"}
@@ -577,9 +617,7 @@ export default function CheckoutScreen() {
               {/* Bank Transfer */}
               {selectedPayment === "bank_transfer" && (
                 <View className="p-4">
-                  <Text className={`text-sm ${textSub} mb-4`}>
-                    เลือกธนาคารที่ต้องการโอนเงิน
-                  </Text>
+                  <Text className={`text-sm ${textSub} mb-4`}>เลือกธนาคารที่ต้องการโอนเงิน</Text>
 
                   {bankOptions.map((bank) => (
                     <TouchableOpacity
@@ -588,8 +626,8 @@ export default function CheckoutScreen() {
                         selectedBank === bank.id
                           ? "border-primary bg-primary/5"
                           : isDark
-                          ? "border-border-dark"
-                          : "border-border-light"
+                            ? "border-border-dark"
+                            : "border-border-light"
                       }`}
                       onPress={() => setSelectedBank(bank.id)}
                     >
@@ -599,15 +637,17 @@ export default function CheckoutScreen() {
                           <Text className={`text-xs ${textSub} mt-1`}>
                             เลขบัญชี: {bank.accountNo}
                           </Text>
-                          <Text className={`text-xs ${textSub}`}>ชื่อบัญชี: {bank.accountName}</Text>
+                          <Text className={`text-xs ${textSub}`}>
+                            ชื่อบัญชี: {bank.accountName}
+                          </Text>
                         </View>
                         <View
                           className={`w-5 h-5 rounded-full border-2 items-center justify-center ${
                             selectedBank === bank.id
                               ? "border-primary bg-primary"
                               : isDark
-                              ? "border-border-dark"
-                              : "border-border-light"
+                                ? "border-border-dark"
+                                : "border-border-light"
                           }`}
                         >
                           {selectedBank === bank.id && (

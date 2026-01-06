@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -40,6 +40,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { bgColor, cardBg, textMain, textSub, borderColor, iconSub, isDark } = useThemeColors();
 
+  // ฟังก์ชันกดเมนู
   const handleMenuPress = (id: string) => {
     switch (id) {
       case "profile":
@@ -50,24 +51,39 @@ export default function ProfileScreen() {
         router.push("/(customer)/(tabs)/orders");
         break;
       case "addresses":
-        // TODO: สร้างหน้าจัดการที่อยู่
-        alert("เปิดหน้าที่อยู่จัดส่ง");
+        // ไปหน้าจัดการที่อยู่
+        router.push("/(customer)/addresses");
         break;
       case "payment":
-        // TODO: สร้างหน้าวิธีชำระเงิน
-        alert("เปิดหน้าวิธีชำระเงิน");
+        // ไปหน้าวิธีชำระเงิน
+        router.push("/(customer)/payment-methods");
         break;
       case "favorites":
-        // TODO: สร้างหน้าสินค้าที่ชอบ
-        alert("เปิดหน้าสินค้าที่ชอบ");
+        // ไปหน้าสินค้าที่ชอบ
+        router.push("/(customer)/favorites");
         break;
       case "reviews":
-        // TODO: สร้างหน้ารีวิวของฉัน
-        alert("เปิดหน้ารีวิวของฉัน");
+        // ไปหน้ารีวิวของฉัน
+        router.push("/(customer)/reviews");
         break;
       default:
-        alert(`เปิดหน้า ${id}`);
+        Alert.alert("Coming Soon", `หน้า ${id} จะพร้อมใช้งานเร็วๆ นี้`);
     }
+  };
+
+  // ฟังก์ชัน Logout
+  const handleLogout = () => {
+    Alert.alert("ออกจากระบบ", "คุณต้องการออกจากระบบหรือไม่?", [
+      { text: "ยกเลิก", style: "cancel" },
+      {
+        text: "ออกจากระบบ",
+        style: "destructive",
+        onPress: () => {
+          // Mock logout - ไปหน้า Login
+          router.replace("/(auth)/login");
+        },
+      },
+    ]);
   };
 
   return (
@@ -167,7 +183,10 @@ export default function ProfileScreen() {
         ))}
 
         {/* Logout */}
-        <TouchableOpacity className={`mx-4 mt-6 ${cardBg} rounded-xl p-4 flex-row items-center justify-center`}>
+        <TouchableOpacity
+          className={`mx-4 mt-6 ${cardBg} rounded-xl p-4 flex-row items-center justify-center`}
+          onPress={handleLogout}
+        >
           <Ionicons name="log-out-outline" size={20} color="#ef4444" />
           <Text className="ml-2 text-red-500 font-medium">ออกจากระบบ</Text>
         </TouchableOpacity>
