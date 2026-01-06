@@ -1,74 +1,124 @@
 /**
- * Customer Tabs Layout - Bottom Tab Navigation
- * แสดง Tab Bar ด้านล่างสำหรับหน้าหลักๆ
+ * Customer Tabs Layout - Custom Bottom Tab Navigation
+ * ใช้ Slot + Custom Tab Bar แทน Tabs component เพื่อรองรับ New Architecture
  */
 
 import React from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
-import { Tabs } from "expo-router";
+import { Slot, usePathname, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Tab configuration
 const tabs = [
-  { name: "index", title: "หน้าแรก", icon: "home" },
-  { name: "catalog", title: "สินค้า", icon: "grid" },
-  { name: "cart", title: "ตะกร้า", icon: "cart" },
-  { name: "orders", title: "คำสั่งซื้อ", icon: "receipt" },
-  { name: "profile", title: "บัญชี", icon: "person" },
+  { name: "index", path: "/(customer)/(tabs)", title: "หน้าแรก", icon: "home" },
+  { name: "catalog", path: "/(customer)/(tabs)/catalog", title: "สินค้า", icon: "grid" },
+  { name: "cart", path: "/(customer)/(tabs)/cart", title: "ตะกร้า", icon: "cart", badge: 2 },
+  { name: "orders", path: "/(customer)/(tabs)/orders", title: "คำสั่งซื้อ", icon: "receipt" },
+  { name: "profile", path: "/(customer)/(tabs)/profile", title: "บัญชี", icon: "person" },
 ] as const;
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // หา active tab จาก pathname
+  const getActiveTab = () => {
+    if (pathname === "/" || pathname === "/(customer)/(tabs)" || pathname === "/index") {
+      return "index";
+    }
+    const match = tabs.find(
+      (tab) => tab.name !== "index" && pathname.includes(`/${tab.name}`)
+    );
+    return match?.name || "index";
+  };
+
+  const activeTab = getActiveTab();
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
+    <View style={{ flex: 1 }}>
+      {/* Content */}
+      <View style={{ flex: 1 }}>
+        <Slot />
+      </View>
+
+      {/* Custom Tab Bar */}
+      <View
+        style={{
           backgroundColor: "#ffffff",
           borderTopWidth: 1,
           borderTopColor: "#e5e7eb",
-          height: 60 + insets.bottom,
           paddingBottom: insets.bottom,
           paddingTop: 8,
-        },
-        tabBarActiveTintColor: "#137fec",
-        tabBarInactiveTintColor: "#94a3b8",
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "500",
-          marginTop: 2,
-        },
-      }}
-    >
-      {tabs.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            title: tab.title,
-            tabBarIcon: ({ color, focused }) => (
-              <Ionicons
-                name={focused ? (tab.icon as any) : (`${tab.icon}-outline` as any)}
-                size={24}
-                color={color}
-              />
-            ),
-            // แสดง badge บนตะกร้า (mock)
-            ...(tab.name === "cart" && {
-              tabBarBadge: 2,
-              tabBarBadgeStyle: {
-                backgroundColor: "#ef4444",
-                fontSize: 10,
-                minWidth: 18,
-                height: 18,
-              },
-            }),
-          }}
-        />
-      ))}
-    </Tabs>
+          flexDirection: "row",
+        }}
+      >
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.name;
+
+          return (
+            <TouchableOpacity
+              key={tab.name}
+              style={{
+                flex: 1,
+                alignItems: "center",
+                paddingVertical: 4,
+              }}
+              onPress={() => router.push(tab.path as any)}
+            >
+              {/* Icon Container with Badge */}
+              <View style={{ position: "relative" }}>
+                <Ionicons
+                  name={isActive ? (tab.icon as any) : (`${tab.icon}-outline` as any)}
+                  size={24}
+                  color={isActive ? "#137fec" : "#94a3b8"}
+                />
+
+                {/* Badge */}
+                {tab.badge && tab.badge > 0 && (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: -4,
+                      right: -8,
+                      backgroundColor: "#ef4444",
+                      borderRadius: 9,
+                      minWidth: 18,
+                      height: 18,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingHorizontal: 4,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#ffffff",
+                        fontSize: 10,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {tab.badge}
+                    </Text>
+                  </View>
+                )}
+              </View>
+
+              {/* Label */}
+              <Text
+                style={{
+                  fontSize: 11,
+                  fontWeight: "500",
+                  marginTop: 2,
+                  color: isActive ? "#137fec" : "#94a3b8",
+                }}
+              >
+                {tab.title}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
   );
 }
-

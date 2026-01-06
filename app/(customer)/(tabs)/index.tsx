@@ -10,7 +10,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Badge, IconButton } from "../../../components/ui";
+import { Badge, IconButton, BannerCarousel } from "../../../components/ui";
 import { ProductRow, CategoryRow } from "../../../components/product";
 
 // Mock Data
@@ -74,24 +74,17 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Promo Banner */}
-        <View className="px-4 mb-6">
-          <TouchableOpacity className="relative rounded-2xl overflow-hidden" activeOpacity={0.95}>
-            <Image
-              source={{ uri: mockPromoBanners[0].imageUrl }}
-              className="w-full h-44"
-              resizeMode="cover"
-            />
-            {/* Overlay content */}
-            <View className="absolute inset-0 bg-black/30 p-4 justify-end">
-              <Badge variant="promo" className="mb-2">
-                {mockPromoBanners[0].badge}
-              </Badge>
-              <Text className="text-xl font-bold text-white mb-1">{mockPromoBanners[0].title}</Text>
-              <Text className="text-sm text-white/90">{mockPromoBanners[0].subtitle}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        {/* Promo Banner Carousel - เลื่อน auto ทุก 4 วินาที */}
+        <BannerCarousel
+          banners={mockPromoBanners}
+          autoPlayInterval={4000}
+          height={176}
+          onBannerPress={(banner) => {
+            // TODO: navigate ไปยัง link ของ banner
+            console.log("Banner pressed:", banner.link);
+          }}
+          className="mb-6"
+        />
 
         {/* Categories */}
         <View className="mb-6">
@@ -149,26 +142,6 @@ export default function HomeScreen() {
           onProductPress={(product) => router.push(`/(customer)/product/${product.id}`)}
           className="mb-6"
         />
-
-        {/* Second Promo Banner */}
-        {mockPromoBanners[1] && (
-          <View className="px-4">
-            <TouchableOpacity className="relative rounded-2xl overflow-hidden" activeOpacity={0.95}>
-              <Image
-                source={{ uri: mockPromoBanners[1].imageUrl }}
-                className="w-full h-36"
-                resizeMode="cover"
-              />
-              <View className="absolute inset-0 bg-black/30 p-4 justify-end">
-                <Badge variant="white" className="mb-2">
-                  {mockPromoBanners[1].badge}
-                </Badge>
-                <Text className="text-lg font-bold text-white">{mockPromoBanners[1].title}</Text>
-                <Text className="text-xs text-white/90">{mockPromoBanners[1].subtitle}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
       </ScrollView>
     </SafeAreaView>
   );

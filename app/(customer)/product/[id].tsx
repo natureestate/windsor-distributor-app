@@ -10,6 +10,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Pressable,
+  Platform,
   Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -215,12 +217,23 @@ export default function ProductDetailScreen() {
       >
         {/* Header */}
         <View className="absolute top-0 left-0 right-0 z-10 flex-row items-center justify-between px-4 py-2">
-          <TouchableOpacity
-            className="w-10 h-10 bg-white/80 rounded-full items-center justify-center"
+          <Pressable
             onPress={() => router.back()}
+            style={({ pressed }) => ({
+              width: 40,
+              height: 40,
+              backgroundColor: "rgba(255,255,255,0.8)",
+              borderRadius: 20,
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: pressed ? 0.6 : 1,
+              cursor: Platform.OS === "web" ? "pointer" : undefined,
+            })}
+            accessibilityRole="button"
+            accessibilityLabel="กลับ"
           >
             <Ionicons name="arrow-back" size={22} color="#0d141b" />
-          </TouchableOpacity>
+          </Pressable>
 
           <View className="flex-row gap-2">
             <TouchableOpacity

@@ -10,3 +10,4 @@ export { Input, SearchInput } from "./Input";
 export { Rating } from "./Rating";
 export { Chip, ChipGroup } from "./Chip";
 export { IconButton } from "./IconButton";
+export { BannerCarousel } from "./BannerCarousel";

@@ -1,21 +1,19 @@
 /**
  * Customer Layout - รวม Tabs และหน้าอื่นๆ
+ * ใช้ Slot แทน Stack เพื่อรองรับ New Architecture ใน Expo Go
  * - (tabs) = หน้าที่มี Bottom Tab Navigation
  * - product/[id] = หน้ารายละเอียดสินค้า
  * - checkout = หน้าชำระเงิน
  * - orders/[id] = หน้ารายละเอียดคำสั่งซื้อ
  */
 
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import { View } from "react-native";
 
 export default function CustomerLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="product/[id]" />
-      <Stack.Screen name="product/[id]/configure" />
-      <Stack.Screen name="checkout" />
-      <Stack.Screen name="orders/[id]" />
-    </Stack>
+    <View style={{ flex: 1 }}>
+      <Slot />
+    </View>
   );
 }

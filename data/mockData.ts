@@ -108,43 +108,93 @@ export const mockColorOptions: ColorOption[] = [
 
 // =============================================================================
 // GLASS OPTIONS - ตัวเลือกกระจก
+// priceModifier = ราคาเพิ่มต่อตารางเมตร (บาท/ตร.ม.)
 // =============================================================================
 
 export const mockGlassOptions: GlassOption[] = [
   {
-    id: "clear",
-    name: "Clear Glass",
-    nameTh: "กระจกใส",
-    description: "กระจกใสมาตรฐาน",
-    priceModifier: 0,
+    id: "clear-5mm",
+    name: "Clear Glass 5mm",
+    nameTh: "กระจกใส 5 มม.",
+    description: "กระจกใสมาตรฐาน ความหนา 5 มม.",
+    priceModifier: 0, // ราคาพื้นฐาน
   },
   {
-    id: "tinted",
-    name: "Tinted Glass",
-    nameTh: "กระจกสี",
-    description: "กระจกสีเขียว/เทา กันแสง",
-    priceModifier: 800,
+    id: "clear-6mm",
+    name: "Clear Glass 6mm",
+    nameTh: "กระจกใส 6 มม.",
+    description: "กระจกใสมาตรฐาน ความหนา 6 มม.",
+    priceModifier: 150, // +150 บาท/ตร.ม.
   },
   {
-    id: "tempered",
-    name: "Tempered Glass",
-    nameTh: "กระจกเทมเปอร์",
+    id: "frosted",
+    name: "Frosted Glass",
+    nameTh: "กระจกฝ้า",
+    description: "กระจกฝ้าพ่นทราย กันการมองทะลุ",
+    priceModifier: 350, // +350 บาท/ตร.ม.
+  },
+  {
+    id: "tinted-green",
+    name: "Tinted Glass - Green",
+    nameTh: "กระจกสีเขียว",
+    description: "กระจกสีเขียวตัดแสง ลดความร้อน 30%",
+    priceModifier: 400, // +400 บาท/ตร.ม.
+  },
+  {
+    id: "tinted-grey",
+    name: "Tinted Glass - Grey",
+    nameTh: "กระจกสีเทา",
+    description: "กระจกสีเทาควัน ลดความร้อน 35%",
+    priceModifier: 400, // +400 บาท/ตร.ม.
+  },
+  {
+    id: "tinted-bronze",
+    name: "Tinted Glass - Bronze",
+    nameTh: "กระจกสีชา",
+    description: "กระจกสีชาบรอนซ์ ลดความร้อน 40%",
+    priceModifier: 450, // +450 บาท/ตร.ม.
+  },
+  {
+    id: "tinted-blue",
+    name: "Tinted Glass - Blue",
+    nameTh: "กระจกสีฟ้า",
+    description: "กระจกสีฟ้าน้ำทะเล สวยงามทันสมัย",
+    priceModifier: 500, // +500 บาท/ตร.ม.
+  },
+  {
+    id: "tempered-5mm",
+    name: "Tempered Glass 5mm",
+    nameTh: "กระจกเทมเปอร์ 5 มม.",
     description: "กระจกนิรภัย แข็งแรงกว่าปกติ 5 เท่า",
-    priceModifier: 1500,
+    priceModifier: 650, // +650 บาท/ตร.ม.
   },
   {
-    id: "double",
-    name: "Double Glazed",
-    nameTh: "กระจก 2 ชั้น",
-    description: "กระจก 2 ชั้น กันเสียง กันความร้อน",
-    priceModifier: 3000,
+    id: "tempered-6mm",
+    name: "Tempered Glass 6mm",
+    nameTh: "กระจกเทมเปอร์ 6 มม.",
+    description: "กระจกนิรภัย แข็งแรงกว่าปกติ 5 เท่า หนา 6 มม.",
+    priceModifier: 800, // +800 บาท/ตร.ม.
   },
   {
     id: "laminated",
     name: "Laminated Glass",
     nameTh: "กระจกลามิเนต",
-    description: "กระจกลามิเนต ปลอดภัยสูงสุด",
-    priceModifier: 4500,
+    description: "กระจกลามิเนต 2 ชั้น ปลอดภัยสูงสุด ไม่แตกกระจาย",
+    priceModifier: 1200, // +1,200 บาท/ตร.ม.
+  },
+  {
+    id: "double-glazed",
+    name: "Double Glazed (IGU)",
+    nameTh: "กระจก 2 ชั้น (IGU)",
+    description: "กระจก 2 ชั้นสุญญากาศ กันเสียง กันความร้อนดีเยี่ยม",
+    priceModifier: 1800, // +1,800 บาท/ตร.ม.
+  },
+  {
+    id: "low-e",
+    name: "Low-E Glass",
+    nameTh: "กระจก Low-E",
+    description: "กระจกเคลือบ Low-E กันความร้อนสูงสุด ประหยัดพลังงาน",
+    priceModifier: 2500, // +2,500 บาท/ตร.ม.
   },
 ];
 
@@ -528,6 +578,26 @@ export const mockPromoBanners: PromoBanner[] = [
     badge: "NEW",
     badgeColor: "white",
     link: "/catalog?category=accessory&tag=smart-lock",
+  },
+  {
+    id: "promo-3",
+    title: "Premium Window Collection",
+    subtitle: "ฟรีค่าติดตั้งเมื่อซื้อครบ 50,000 บาท",
+    imageUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuC7uxA8VXZpVSsC-I7x5vEUYq2gYvXtwI9z3g0YiFSqB0QjmAi2SCBjWBwzAdPT1Vdb-9hCbiWAO4rUpcHyKiLJjj8XhCiqEXFhfeJid3WXqm2tCB50Zywmkz5rMPfk6ATwq7ZE3-jF7XwRlfrxhKPyXWjRdv7cTsuNpvVhoTAmEor7l1RE-OjE4j28Jax6TKP6YZGftNGlZTwtvESPkrUt0NXuFCj6-RGPO_PLZYQLO8WiuvcoDenp8JLopXBWP9-S6wA86ZVGA3XA",
+    badge: "HOT",
+    badgeColor: "primary",
+    link: "/catalog?category=window",
+  },
+  {
+    id: "promo-4",
+    title: "Year End Clearance",
+    subtitle: "ลดสูงสุด 30% สินค้าคัดสรร",
+    imageUrl:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBErZR8CHQW5eyiCbjZJ8qdstSfHGIUzwl50Zr0whX0_-r6nFg-qSsxSq4V1Ljwk7OJ_mYqZLd7XXqEcTWXghPgDQ80aP7KqfvhYXAP69plsokMpSEFkzPvSMkiiEwLjaQ3rguPVenEzPCl1A3ZjkzWJocxNze8YKj6RM4h2PaFNUq45sllVP7io0-u1N1n-GiZH4GeNd3QX9kRxPcGkTc4Fy9kUSwg3oKMe43fQYEdVZq2pRNE3r3XFU785LZGEixpLP6jr_pIjT3Y",
+    badge: "SALE",
+    badgeColor: "white",
+    link: "/catalog?filter=clearance",
   },
 ];
 

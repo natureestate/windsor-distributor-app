@@ -4,13 +4,13 @@
  */
 
 import React, { useState } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, Pressable, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 // Components
-import { Button, Card } from "../../components/ui";
+import { Button } from "../../components/ui";
 
 // Mock Data
 import { mockUser, mockCartItems } from "../../data/mockData";
@@ -82,16 +82,25 @@ export default function CheckoutScreen() {
 
     // Navigate to success/orders
     alert("สั่งซื้อสำเร็จ!");
-    router.replace("/(customer)/orders");
+    router.replace("/(customer)/(tabs)/orders");
   };
 
   return (
     <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
       {/* Header */}
       <View className="px-4 py-3 bg-white border-b border-border-light flex-row items-center">
-        <TouchableOpacity onPress={() => router.back()} className="mr-3">
+        <Pressable
+          onPress={() => router.back()}
+          style={({ pressed }) => ({
+            marginRight: 12,
+            opacity: pressed ? 0.6 : 1,
+            cursor: Platform.OS === "web" ? "pointer" : undefined,
+          })}
+          accessibilityRole="button"
+          accessibilityLabel="กลับ"
+        >
           <Ionicons name="arrow-back" size={24} color="#0d141b" />
-        </TouchableOpacity>
+        </Pressable>
         <Text className="text-xl font-bold text-text-main-light">ชำระเงิน</Text>
       </View>
 

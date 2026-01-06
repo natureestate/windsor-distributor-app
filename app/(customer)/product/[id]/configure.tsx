@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useMemo } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Pressable, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -38,6 +38,12 @@ export default function ProductConfigureScreen() {
   const [selectedGlass, setSelectedGlass] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
+  // หา glass option ที่เลือก
+  const selectedGlassOption = useMemo(() => {
+    if (!selectedGlass || !product?.constraints?.glassTypes) return null;
+    return product.constraints.glassTypes.find((g) => g.id === selectedGlass);
+  }, [selectedGlass, product]);
+
   // คำนวณราคา
   const calculatedPrice = useMemo(() => {
     if (!product) return 0;
@@ -50,21 +56,25 @@ export default function ProductConfigureScreen() {
     // คำนวณพื้นที่ (ตร.ม.)
     const area = (w / 100) * (h / 100);
 
-    // ราคาพื้นฐานต่อ ตร.ม. (สมมุติ)
-    const pricePerSqm = product.basePrice / 2;
+    // ราคาพื้นฐานเฟรมต่อ ตร.ม. (ประมาณ 8,000 บาท/ตร.ม. สำหรับ uPVC)
+    const framePrice = 8000;
+
+    // ราคากระจกพื้นฐาน (กระจกใส 5mm ประมาณ 800 บาท/ตร.ม.)
+    const baseGlassPrice = 800;
+
+    // ราคากระจกที่เลือก
+    const glassModifier = selectedGlassOption?.priceModifier || 0;
+    const totalGlassPrice = baseGlassPrice + glassModifier;
+
+    // ราคารวมต่อ ตร.ม.
+    const pricePerSqm = framePrice + totalGlassPrice;
 
     // ราคาตามพื้นที่
-    let price = pricePerSqm * area;
+    const price = pricePerSqm * area;
 
-    // ค่ากระจกเพิ่มเติม
-    if (selectedGlass === "laminated") {
-      price *= 1.3; // +30%
-    } else if (selectedGlass === "tempered") {
-      price *= 1.5; // +50%
-    }
-
-    return Math.round(price);
-  }, [product, width, height, selectedGlass]);
+    // ราคาขั้นต่ำ (ไม่ต่ำกว่า basePrice)
+    return Math.max(Math.round(price), product.basePrice);
+  }, [product, width, height, selectedGlassOption]);
 
   // Validation
   const isValid = useMemo(() => {
@@ -122,9 +132,18 @@ export default function ProductConfigureScreen() {
     <SafeAreaView className="flex-1 bg-background-light" edges={["top"]}>
       {/* Header */}
       <View className="px-4 py-3 bg-white border-b border-border-light flex-row items-center">
-        <TouchableOpacity onPress={() => router.back()} className="mr-3">
+        <Pressable
+          onPress={() => router.back()}
+          style={({ pressed }) => ({
+            marginRight: 12,
+            opacity: pressed ? 0.6 : 1,
+            cursor: Platform.OS === "web" ? "pointer" : undefined,
+          })}
+          accessibilityRole="button"
+          accessibilityLabel="กลับ"
+        >
           <Ionicons name="arrow-back" size={24} color="#0d141b" />
-        </TouchableOpacity>
+        </Pressable>
         <View className="flex-1">
           <Text className="text-lg font-bold text-text-main-light">กำหนดขนาด</Text>
           <Text className="text-xs text-text-sub-light" numberOfLines={1}>
@@ -256,6 +275,9 @@ export default function ProductConfigureScreen() {
         {product.constraints?.glassTypes && product.constraints.glassTypes.length > 0 && (
           <View className="bg-white rounded-xl p-4 mb-4">
             <Text className="text-sm font-semibold text-text-main-light mb-3">ประเภทกระจก</Text>
+            <Text className="text-xs text-text-sub-light mb-3">
+              * ราคาเพิ่มต่อตารางเมตร (บาท/ตร.ม.)
+            </Text>
             {product.constraints.glassTypes.map((glass) => (
               <TouchableOpacity
                 key={glass.id}
@@ -277,10 +299,12 @@ export default function ProductConfigureScreen() {
                   <Text className="text-sm font-medium text-text-main-light">{glass.nameTh}</Text>
                   <Text className="text-xs text-text-sub-light">{glass.description}</Text>
                 </View>
-                {glass.priceModifier !== 1 && (
+                {glass.priceModifier > 0 ? (
                   <Text className="text-xs text-primary font-medium">
-                    +{Math.round((glass.priceModifier - 1) * 100)}%
+                    +{glass.priceModifier.toLocaleString()} บาท/ตร.ม.
                   </Text>
+                ) : (
+                  <Text className="text-xs text-green-600 font-medium">รวมในราคา</Text>
                 )}
               </TouchableOpacity>
             ))}
